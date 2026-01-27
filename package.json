@@ -17,11 +17,6 @@
     "clean:dev": "tsx scripts/clean-dev.ts",
     "prepare": "lefthook install"
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-git"
-    }
-  },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "@iconify/vue": "^5.0.0",
@@ -59,7 +54,6 @@
     "@types/node": "^25.0.10",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/compiler-sfc": "^3.0.5",
-    "commitizen": "^4.3.0",
     "cz-git": "^1.12.0",
     "eslint": "^9.39.2",
     "eslint-plugin-format": "^1.3.1",
