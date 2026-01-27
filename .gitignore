@@ -1,9 +1,8 @@
 node_modules
 .DS_Store
 dist
-dist-ssr
 *.local
-.cursorrules
+.husky
 
 # Auto-generated files
 src/types/import/auto-imports.d.ts

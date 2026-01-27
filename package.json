@@ -14,7 +14,8 @@
     "fix": "eslint --fix",
     "lint:stylelint": "stylelint  \"**/*.{css,scss,vue}\" --fix",
     "commit": "czg",
-    "clean:dev": "tsx scripts/clean-dev.ts"
+    "clean:dev": "tsx scripts/clean-dev.ts",
+    "prepare": "lefthook install"
   },
   "config": {
     "commitizen": {
