@@ -9,7 +9,6 @@ import Components from 'unplugin-vue-components/vite'
 import { defineConfig, loadEnv } from 'vite'
 import viteCompression from 'vite-plugin-compression'
 import vueDevTools from 'vite-plugin-vue-devtools'
-// import { visualizer } from 'rollup-plugin-visualizer'
 
 export default ({ mode }: { mode: string }) => {
   const root = process.cwd()
@@ -20,6 +19,40 @@ export default ({ mode }: { mode: string }) => {
   console.log(`🚀 VERSION = ${VITE_VERSION}`)
 
   return defineConfig({
+    plugins: [
+      vue(),
+      tailwindcss(),
+      // 自动按需导入 API
+      AutoImport({
+        imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+        dts: 'src/types/import/auto-imports.d.ts',
+        resolvers: [ElementPlusResolver()],
+        eslintrc: {
+          enabled: true,
+          filepath: './.auto-import.json',
+          globalsPropValue: true,
+        },
+      }),
+      // 自动按需导入组件
+      Components({
+        dts: 'src/types/import/components.d.ts',
+        resolvers: [ElementPlusResolver()],
+      }),
+      // 按需定制主题配置
+      ElementPlus({
+        useSource: true,
+      }),
+      // 压缩
+      viteCompression({
+        verbose: false, // 是否在控制台输出压缩结果
+        disable: false, // 是否禁用
+        algorithm: 'gzip', // 压缩算法
+        ext: '.gz', // 压缩后的文件名后缀
+        threshold: 10240, // 只有大小大于该值的资源会被处理 10240B = 10KB
+        deleteOriginFile: false, // 压缩后是否删除原文件
+      }),
+      vueDevTools(),
+    ],
     define: {
       __APP_VERSION__: JSON.stringify(VITE_VERSION),
     },
@@ -65,47 +98,7 @@ export default ({ mode }: { mode: string }) => {
         include: ['src/views/**/*.vue'],
       },
     },
-    plugins: [
-      vue(),
-      tailwindcss(),
-      // 自动按需导入 API
-      AutoImport({
-        imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
-        dts: 'src/types/import/auto-imports.d.ts',
-        resolvers: [ElementPlusResolver()],
-        eslintrc: {
-          enabled: true,
-          filepath: './.auto-import.json',
-          globalsPropValue: true,
-        },
-      }),
-      // 自动按需导入组件
-      Components({
-        dts: 'src/types/import/components.d.ts',
-        resolvers: [ElementPlusResolver()],
-      }),
-      // 按需定制主题配置
-      ElementPlus({
-        useSource: true,
-      }),
-      // 压缩
-      viteCompression({
-        verbose: false, // 是否在控制台输出压缩结果
-        disable: false, // 是否禁用
-        algorithm: 'gzip', // 压缩算法
-        ext: '.gz', // 压缩后的文件名后缀
-        threshold: 10240, // 只有大小大于该值的资源会被处理 10240B = 10KB
-        deleteOriginFile: false, // 压缩后是否删除原文件
-      }),
-      vueDevTools(),
-      // 打包分析
-      // visualizer({
-      //   open: true,
-      //   gzipSize: true,
-      //   brotliSize: true,
-      //   filename: 'dist/stats.html' // 分析图生成的文件名及路径
-      // }),
-    ],
+
     // 依赖预构建：避免运行时重复请求与转换，提升首次加载速度
     optimizeDeps: {
       include: [
