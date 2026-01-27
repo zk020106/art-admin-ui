@@ -11,12 +11,12 @@
     </div>
 
     <ArtLineChart
-      :showAreaColor="true"
-      :showAxisLabel="false"
-      :showAxisLine="false"
-      :showSplitLine="false"
+      :show-area-color="true"
+      :show-axis-label="false"
+      :show-axis-line="false"
+      :show-split-line="false"
       :data="[50, 85, 65, 95, 75, 130, 180]"
-      barWidth="16px"
+      bar-width="16px"
       height="5rem"
     />
   </div>

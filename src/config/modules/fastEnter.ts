@@ -1,9 +1,9 @@
+import type { FastEnterConfig } from '@/types/config'
 /**
  * 快速入口配置
  * 包含：应用列表、快速链接等配置
  */
 import { WEB_LINKS } from '@/utils/constants'
-import type { FastEnterConfig } from '@/types/config'
 
 const fastEnterConfig: FastEnterConfig = {
   // 显示条件（屏幕宽度）
@@ -17,7 +17,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#377dff',
       enabled: true,
       order: 1,
-      routeName: 'Console'
+      routeName: 'Console',
     },
     {
       name: '分析页',
@@ -26,7 +26,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#ff3b30',
       enabled: true,
       order: 2,
-      routeName: 'Analysis'
+      routeName: 'Analysis',
     },
     {
       name: '礼花效果',
@@ -35,7 +35,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#7A7FFF',
       enabled: true,
       order: 3,
-      routeName: 'Fireworks'
+      routeName: 'Fireworks',
     },
     {
       name: '聊天',
@@ -44,7 +44,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#13DEB9',
       enabled: true,
       order: 4,
-      routeName: 'Chat'
+      routeName: 'Chat',
     },
     {
       name: '官方文档',
@@ -53,7 +53,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#ffb100',
       enabled: true,
       order: 5,
-      link: WEB_LINKS.DOCS
+      link: WEB_LINKS.DOCS,
     },
     {
       name: '技术支持',
@@ -62,7 +62,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#ff6b6b',
       enabled: true,
       order: 6,
-      link: WEB_LINKS.COMMUNITY
+      link: WEB_LINKS.COMMUNITY,
     },
     {
       name: '更新日志',
@@ -71,7 +71,7 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#38C0FC',
       enabled: true,
       order: 7,
-      routeName: 'ChangeLog'
+      routeName: 'ChangeLog',
     },
     {
       name: '哔哩哔哩',
@@ -80,8 +80,8 @@ const fastEnterConfig: FastEnterConfig = {
       iconColor: '#FB7299',
       enabled: true,
       order: 8,
-      link: WEB_LINKS.BILIBILI
-    }
+      link: WEB_LINKS.BILIBILI,
+    },
   ],
   // 快速链接
   quickLinks: [
@@ -89,39 +89,39 @@ const fastEnterConfig: FastEnterConfig = {
       name: '登录',
       enabled: true,
       order: 1,
-      routeName: 'Login'
+      routeName: 'Login',
     },
     {
       name: '注册',
       enabled: true,
       order: 2,
-      routeName: 'Register'
+      routeName: 'Register',
     },
     {
       name: '忘记密码',
       enabled: true,
       order: 3,
-      routeName: 'ForgetPassword'
+      routeName: 'ForgetPassword',
     },
     {
       name: '定价',
       enabled: true,
       order: 4,
-      routeName: 'Pricing'
+      routeName: 'Pricing',
     },
     {
       name: '个人中心',
       enabled: true,
       order: 5,
-      routeName: 'UserCenter'
+      routeName: 'UserCenter',
     },
     {
       name: '留言管理',
       enabled: true,
       order: 6,
-      routeName: 'ArticleComment'
-    }
-  ]
+      routeName: 'ArticleComment',
+    },
+  ],
 }
 
 export default Object.freeze(fastEnterConfig)

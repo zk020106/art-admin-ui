@@ -1,4 +1,21 @@
 <!-- https://vue-draggable-plus.pages.dev/ -->
+<script setup lang="ts">
+import { VueDraggable } from 'vue-draggable-plus'
+
+defineOptions({ name: 'TemplateDrag' })
+
+/**
+ * 用户列表数据
+ * 用于演示拖拽排序功能
+ */
+const userList = ref([
+  { name: '孙悟空', role: '斗战胜佛' },
+  { name: '猪八戒', role: '净坛使者' },
+  { name: '沙僧', role: '金身罗汉' },
+  { name: '唐僧', role: '旃檀功德佛' },
+])
+</script>
+
 <template>
   <div class="page-content mb-5">
     <ElRow>
@@ -9,9 +26,9 @@
         <template #default>
           <VueDraggable ref="el" v-model="userList">
             <div
-              class="p-2.5 mb-2.5 cursor-move bg-active-color rounded"
               v-for="item in userList"
               :key="item.name"
+              class="p-2.5 mb-2.5 cursor-move bg-active-color rounded"
             >
               {{ item.name }}
             </div>
@@ -44,7 +61,7 @@
         <span class="text-base font-bold">表格拖拽排序</span>
       </template>
       <template #default>
-        <VueDraggable target="tbody" v-model="userList" :animation="150">
+        <VueDraggable v-model="userList" target="tbody" :animation="150">
           <ArtTable :data="userList">
             <ElTableColumn label="姓名" prop="name" />
             <ElTableColumn label="角色" prop="role" />
@@ -58,12 +75,14 @@
         <span class="text-base font-bold">指定元素拖拽排序</span>
       </template>
       <template #default>
-        <VueDraggable target="tbody" handle=".handle" v-model="userList" :animation="150">
+        <VueDraggable v-model="userList" target="tbody" handle=".handle" :animation="150">
           <ArtTable :data="userList">
             <ElTableColumn label="姓名" prop="name" />
             <ElTableColumn label="角色" prop="role" />
             <ElTableColumn label="操作" width="100">
-              <ElButton size="default" class="handle"> 移动 </ElButton>
+              <ElButton size="default" class="handle">
+                移动
+              </ElButton>
             </ElTableColumn>
           </ArtTable>
         </VueDraggable>
@@ -71,23 +90,6 @@
     </ElCard>
   </div>
 </template>
-
-<script setup lang="ts">
-  import { VueDraggable } from 'vue-draggable-plus'
-
-  defineOptions({ name: 'TemplateDrag' })
-
-  /**
-   * 用户列表数据
-   * 用于演示拖拽排序功能
-   */
-  const userList = ref([
-    { name: '孙悟空', role: '斗战胜佛' },
-    { name: '猪八戒', role: '净坛使者' },
-    { name: '沙僧', role: '金身罗汉' },
-    { name: '唐僧', role: '旃檀功德佛' }
-  ])
-</script>
 
 <style scoped>
   .fade-move,

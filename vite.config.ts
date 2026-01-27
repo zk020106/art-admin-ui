@@ -1,14 +1,14 @@
-import { defineConfig, loadEnv } from 'vite'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import vueDevTools from 'vite-plugin-vue-devtools'
-import viteCompression from 'vite-plugin-compression'
-import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import ElementPlus from 'unplugin-element-plus/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import tailwindcss from '@tailwindcss/vite'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig, loadEnv } from 'vite'
+import viteCompression from 'vite-plugin-compression'
+import vueDevTools from 'vite-plugin-vue-devtools'
 // import { visualizer } from 'rollup-plugin-visualizer'
 
 export default ({ mode }: { mode: string }) => {
@@ -21,7 +21,7 @@ export default ({ mode }: { mode: string }) => {
 
   return defineConfig({
     define: {
-      __APP_VERSION__: JSON.stringify(VITE_VERSION)
+      __APP_VERSION__: JSON.stringify(VITE_VERSION),
     },
     base: VITE_BASE_URL,
     server: {
@@ -29,10 +29,10 @@ export default ({ mode }: { mode: string }) => {
       proxy: {
         '/api': {
           target: VITE_API_PROXY_URL,
-          changeOrigin: true
-        }
+          changeOrigin: true,
+        },
       },
-      host: true
+      host: true,
     },
     // 路径别名
     resolve: {
@@ -43,8 +43,8 @@ export default ({ mode }: { mode: string }) => {
         '@icons': resolvePath('src/assets/icons'),
         '@utils': resolvePath('src/utils'),
         '@stores': resolvePath('src/store'),
-        '@styles': resolvePath('src/assets/styles')
-      }
+        '@styles': resolvePath('src/assets/styles'),
+      },
     },
     build: {
       target: 'es2015',
@@ -56,14 +56,14 @@ export default ({ mode }: { mode: string }) => {
           // 生产环境去除 console
           drop_console: true,
           // 生产环境去除 debugger
-          drop_debugger: true
-        }
+          drop_debugger: true,
+        },
       },
       dynamicImportVarsOptions: {
         warnOnError: true,
         exclude: [],
-        include: ['src/views/**/*.vue']
-      }
+        include: ['src/views/**/*.vue'],
+      },
     },
     plugins: [
       vue(),
@@ -76,17 +76,17 @@ export default ({ mode }: { mode: string }) => {
         eslintrc: {
           enabled: true,
           filepath: './.auto-import.json',
-          globalsPropValue: true
-        }
+          globalsPropValue: true,
+        },
       }),
       // 自动按需导入组件
       Components({
         dts: 'src/types/import/components.d.ts',
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver()],
       }),
       // 按需定制主题配置
       ElementPlus({
-        useSource: true
+        useSource: true,
       }),
       // 压缩
       viteCompression({
@@ -95,9 +95,9 @@ export default ({ mode }: { mode: string }) => {
         algorithm: 'gzip', // 压缩算法
         ext: '.gz', // 压缩后的文件名后缀
         threshold: 10240, // 只有大小大于该值的资源会被处理 10240B = 10KB
-        deleteOriginFile: false // 压缩后是否删除原文件
+        deleteOriginFile: false, // 压缩后是否删除原文件
       }),
-      vueDevTools()
+      vueDevTools(),
       // 打包分析
       // visualizer({
       //   open: true,
@@ -120,8 +120,8 @@ export default ({ mode }: { mode: string }) => {
         'vue-img-cutter',
         'element-plus/es',
         'element-plus/es/components/*/style/css',
-        'element-plus/es/components/*/style/index'
-      ]
+        'element-plus/es/components/*/style/index',
+      ],
     },
     css: {
       preprocessorOptions: {
@@ -130,8 +130,8 @@ export default ({ mode }: { mode: string }) => {
           additionalData: `
             @use "@styles/core/el-light.scss" as *; 
             @use "@styles/core/mixin.scss" as *;
-          `
-        }
+          `,
+        },
       },
       postcss: {
         plugins: [
@@ -142,12 +142,12 @@ export default ({ mode }: { mode: string }) => {
                 if (atRule.name === 'charset') {
                   atRule.remove()
                 }
-              }
-            }
-          }
-        ]
-      }
-    }
+              },
+            },
+          },
+        ],
+      },
+    },
   })
 }
 

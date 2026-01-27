@@ -1,9 +1,21 @@
+<script setup lang="ts">
+defineOptions({ name: 'WidgetsTextScroll' })
+
+/**
+ * 处理关闭事件
+ */
+function handleClose() {
+  console.log('文本滚动组件已关闭')
+  ElMessage.info('已关闭')
+}
+</script>
+
 <template>
   <div class="page-content space-y-5">
     <!-- 基础用法 -->
     <ArtTextScroll
       text="Art Design Pro 是一款兼具设计美学与高效开发的后台系统 <a target='_blank' href='https://www.artd.pro/docs/'>点击我 </a>访问官方文档"
-      showClose
+      show-close
     />
 
     <!-- 使用不同的类型 -->
@@ -28,8 +40,8 @@
 
     <ArtTextScroll
       text="这是一条文字溢出才会滚动的公告，当文本内容超出容器宽度时才会开始滚动显示，否则保持静止状态"
+      :always-scroll="false"
       @close="handleClose"
-      :alwaysScroll="false"
     />
 
     <ArtTextScroll type="danger" direction="up" :speed="30" text="这是一条向上滚动的公告" />
@@ -37,15 +49,3 @@
     <ArtTextScroll type="info" direction="down" :speed="30" text="这是一条向下滚动的公告" />
   </div>
 </template>
-
-<script setup lang="ts">
-  defineOptions({ name: 'WidgetsTextScroll' })
-
-  /**
-   * 处理关闭事件
-   */
-  const handleClose = () => {
-    console.log('文本滚动组件已关闭')
-    ElMessage.info('已关闭')
-  }
-</script>

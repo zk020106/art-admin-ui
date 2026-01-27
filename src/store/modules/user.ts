@@ -1,3 +1,4 @@
+import type { AppRouteRecord } from '@/types/router'
 /**
  * 用户状态管理模块
  *
@@ -32,16 +33,15 @@
  * @author Art Design Pro Team
  */
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { LanguageEnum } from '@/enums/appEnum'
 import { router } from '@/router'
+import { resetRouterState } from '@/router/guards/beforeEach'
+import { setPageTitle } from '@/utils/router'
+import { StorageConfig } from '@/utils/storage/storage-config'
+import { useMenuStore } from './menu'
 import { useSettingStore } from './setting'
 import { useWorktabStore } from './worktab'
-import { AppRouteRecord } from '@/types/router'
-import { setPageTitle } from '@/utils/router'
-import { resetRouterState } from '@/router/guards/beforeEach'
-import { useMenuStore } from './menu'
-import { StorageConfig } from '@/utils/storage/storage-config'
 
 /**
  * 用户状态管理
@@ -171,7 +171,7 @@ export const useUserStore = defineStore(
       const redirect = currentRoute.path !== '/login' ? currentRoute.fullPath : undefined
       router.push({
         name: 'Login',
-        query: redirect ? { redirect } : undefined
+        query: redirect ? { redirect } : undefined,
       })
     }
 
@@ -185,7 +185,8 @@ export const useUserStore = defineStore(
       const currentUserId = info.value.userId
 
       // 无法获取当前用户 ID，跳过检查
-      if (!currentUserId) return
+      if (!currentUserId)
+        return
 
       // 首次登录或缓存已清除，保留现有标签页
       if (!lastUserId) {
@@ -223,13 +224,13 @@ export const useUserStore = defineStore(
       setLockPassword,
       setToken,
       logOut,
-      checkAndClearWorktabs
+      checkAndClearWorktabs,
     }
   },
   {
     persist: {
       key: 'user',
-      storage: localStorage
-    }
-  }
+      storage: localStorage,
+    },
+  },
 )

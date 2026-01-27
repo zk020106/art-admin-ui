@@ -1,67 +1,72 @@
 <!-- 文章详情页面 -->
+<script setup lang="ts">
+import axios from 'axios'
+import { useCommon } from '@/hooks/core/useCommon'
+import '@/assets/styles/core/md.scss'
+import '@/assets/styles/custom/one-dark-pro.scss'
+
+defineOptions({ name: 'ArticleDetail' })
+
+interface ArticleResponse {
+  code: number
+  data: {
+    title: string
+    html_content: string
+  }
+}
+
+const route = useRoute()
+const articleId = computed(() => Number(route.params.id))
+const articleTitle = ref('')
+const articleHtml = shallowRef('')
+const loading = ref(false)
+const error = ref<string | null>(null)
+
+async function getArticleDetail() {
+  if (!articleId.value)
+    return
+
+  loading.value = true
+  error.value = null
+
+  try {
+    const { data } = await axios.get<ArticleResponse>(
+      'https://www.qiniu.lingchen.kim/blog_detail.json',
+    )
+
+    if (data.code === 200) {
+      articleTitle.value = data.data.title
+      articleHtml.value = data.data.html_content
+    }
+  }
+  catch (err) {
+    error.value = '文章加载失败'
+    console.error('获取文章详情失败:', err)
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+const { scrollToTop } = useCommon()
+
+onMounted(() => {
+  scrollToTop()
+  getArticleDetail()
+})
+</script>
+
 <template>
   <div class="article-detail page-content">
     <div class="max-w-200 m-auto mt-15">
-      <h1 class="text-3xl font-semibold">{{ articleTitle }}</h1>
-      <div class="markdown-body mt-12.5" v-highlight v-html="articleHtml"></div>
+      <h1 class="text-3xl font-semibold">
+        {{ articleTitle }}
+      </h1>
+      <div v-highlight class="markdown-body mt-12.5" v-html="articleHtml" />
     </div>
     <ArtBackToTop />
   </div>
 </template>
-
-<script setup lang="ts">
-  import '@/assets/styles/core/md.scss'
-  import '@/assets/styles/custom/one-dark-pro.scss'
-  import { useCommon } from '@/hooks/core/useCommon'
-  import axios from 'axios'
-
-  defineOptions({ name: 'ArticleDetail' })
-
-  interface ArticleResponse {
-    code: number
-    data: {
-      title: string
-      html_content: string
-    }
-  }
-
-  const route = useRoute()
-  const articleId = computed(() => Number(route.params.id))
-  const articleTitle = ref('')
-  const articleHtml = shallowRef('')
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-
-  const getArticleDetail = async () => {
-    if (!articleId.value) return
-
-    loading.value = true
-    error.value = null
-
-    try {
-      const { data } = await axios.get<ArticleResponse>(
-        'https://www.qiniu.lingchen.kim/blog_detail.json'
-      )
-
-      if (data.code === 200) {
-        articleTitle.value = data.data.title
-        articleHtml.value = data.data.html_content
-      }
-    } catch (err) {
-      error.value = '文章加载失败'
-      console.error('获取文章详情失败:', err)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const { scrollToTop } = useCommon()
-
-  onMounted(() => {
-    scrollToTop()
-    getArticleDetail()
-  })
-</script>
 
 <style lang="scss" scoped>
   .article-detail {

@@ -8,9 +8,9 @@
     </div>
 
     <ArtDualBarCompareChart
-      :positiveData="[50, 80, 120, 90, 60]"
-      :negativeData="[30, 60, 90, 70, 40]"
-      :xAxisData="['一月', '二月', '三月', '四月', '五月']"
+      :positive-data="[50, 80, 120, 90, 60]"
+      :negative-data="[30, 60, 90, 70, 40]"
+      :x-axis-data="['一月', '二月', '三月', '四月', '五月']"
       height="19rem"
     />
   </div>

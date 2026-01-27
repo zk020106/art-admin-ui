@@ -1,6 +1,6 @@
-import { useSettingStore } from '@/store/modules/setting'
-import { storeToRefs } from 'pinia'
 import type { ContainerWidthEnum } from '@/enums/appEnum'
+import { storeToRefs } from 'pinia'
+import { useSettingStore } from '@/store/modules/setting'
 
 /**
  * 设置项通用处理逻辑
@@ -15,7 +15,8 @@ export function useSettingsHandlers() {
       const el = document.getElementsByTagName('html')[0]
       if (add) {
         el.classList.add(className)
-      } else {
+      }
+      else {
         el.classList.remove(className)
       }
     },
@@ -31,10 +32,11 @@ export function useSettingsHandlers() {
       const el = document.getElementsByTagName('body')[0]
       if (add) {
         el.classList.add(className)
-      } else {
+      }
+      else {
         el.classList.remove(className)
       }
-    }
+    },
   }
 
   // 通用切换处理器
@@ -48,7 +50,7 @@ export function useSettingsHandlers() {
   // 通用值变更处理器
   const createValueHandler = <T>(
     storeMethod: (value: T) => void,
-    callback?: (value: T) => void
+    callback?: (value: T) => void,
   ) => {
     return (value: T) => {
       if (value !== undefined && value !== null) {
@@ -89,17 +91,17 @@ export function useSettingsHandlers() {
       () => settingStore.setColorWeak(),
       () => {
         domOperations.setHtmlClass('color-weak', settingStore.colorWeak)
-      }
+      },
     ),
 
     // 水印显示
     watermark: createToggleHandler(() =>
-      settingStore.setWatermarkVisible(!settingStore.watermarkVisible)
+      settingStore.setWatermarkVisible(!settingStore.watermarkVisible),
     ),
 
     // 菜单展开宽度
     menuOpenWidth: createValueHandler<number>((width: number) =>
-      settingStore.setMenuOpenWidth(width)
+      settingStore.setMenuOpenWidth(width),
     ),
 
     // 标签页风格
@@ -107,13 +109,13 @@ export function useSettingsHandlers() {
 
     // 页面切换动画
     pageTransition: createValueHandler<string>((transition: string) =>
-      settingStore.setPageTransition(transition)
+      settingStore.setPageTransition(transition),
     ),
 
     // 圆角大小
     customRadius: createValueHandler<string>((radius: string) =>
-      settingStore.setCustomRadius(radius)
-    )
+      settingStore.setCustomRadius(radius),
+    ),
   }
 
   // 盒子样式处理器
@@ -124,8 +126,8 @@ export function useSettingsHandlers() {
 
       // 防止重复设置
       if (
-        (type === 'shadow-mode' && boxBorderMode.value === false) ||
-        (type === 'border-mode' && boxBorderMode.value === true)
+        (type === 'shadow-mode' && boxBorderMode.value === false)
+        || (type === 'border-mode' && boxBorderMode.value === true)
       ) {
         return
       }
@@ -134,7 +136,7 @@ export function useSettingsHandlers() {
         domOperations.setRootAttribute('data-box-mode', type)
         settingStore.setBorderMode()
       }, 50)
-    }
+    },
   }
 
   // 颜色设置处理器
@@ -143,7 +145,7 @@ export function useSettingsHandlers() {
     selectColor: (theme: string) => {
       settingStore.setElementTheme(theme)
       settingStore.reload()
-    }
+    },
   }
 
   // 容器设置处理器
@@ -152,7 +154,7 @@ export function useSettingsHandlers() {
     setWidth: (type: ContainerWidthEnum) => {
       settingStore.setContainerWidth(type)
       settingStore.reload()
-    }
+    },
   }
 
   return {
@@ -162,6 +164,6 @@ export function useSettingsHandlers() {
     colorHandlers,
     containerHandlers,
     createToggleHandler,
-    createValueHandler
+    createValueHandler,
   }
 }

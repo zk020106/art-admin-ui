@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useSettingStore } from '@/store/modules/setting'
+import { useSettingsConfig } from '../composables/useSettingsConfig'
+import { useSettingsHandlers } from '../composables/useSettingsHandlers'
+import SectionTitle from './SectionTitle.vue'
+
+const settingStore = useSettingStore()
+const { boxBorderMode } = storeToRefs(settingStore)
+const { boxStyleOptions } = useSettingsConfig()
+const { boxStyleHandlers } = useSettingsHandlers()
+
+// 判断当前选项是否激活
+function isActive(type: 'border-mode' | 'shadow-mode') {
+  return type === 'border-mode' ? boxBorderMode.value : !boxBorderMode.value
+}
+</script>
+
 <template>
   <div>
     <SectionTitle :title="$t('setting.box.title')" class="mt-10" />
@@ -18,21 +36,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-  import SectionTitle from './SectionTitle.vue'
-  import { useSettingStore } from '@/store/modules/setting'
-  import { useSettingsConfig } from '../composables/useSettingsConfig'
-  import { useSettingsHandlers } from '../composables/useSettingsHandlers'
-  import { storeToRefs } from 'pinia'
-
-  const settingStore = useSettingStore()
-  const { boxBorderMode } = storeToRefs(settingStore)
-  const { boxStyleOptions } = useSettingsConfig()
-  const { boxStyleHandlers } = useSettingsHandlers()
-
-  // 判断当前选项是否激活
-  const isActive = (type: 'border-mode' | 'shadow-mode') => {
-    return type === 'border-mode' ? boxBorderMode.value : !boxBorderMode.value
-  }
-</script>

@@ -1,4 +1,17 @@
 <!-- 分析页页面 -->
+<script setup lang="ts">
+import CustomerSatisfaction from './modules/customer-satisfaction.vue'
+import SalesMappingByCountry from './modules/sales-mapping-by-country.vue'
+import TargetVsReality from './modules/target-vs-reality.vue'
+import TodaySales from './modules/today-sales.vue'
+import TopProducts from './modules/top-products.vue'
+import TotalRevenue from './modules/total-revenue.vue'
+import VisitorInsights from './modules/visitor-insights.vue'
+import VolumeServiceLevel from './modules/volume-service-level.vue'
+
+defineOptions({ name: 'Analysis' })
+</script>
+
 <template>
   <div>
     <ElRow :gutter="20">
@@ -35,16 +48,3 @@
     </ElRow>
   </div>
 </template>
-
-<script setup lang="ts">
-  import TodaySales from './modules/today-sales.vue'
-  import VisitorInsights from './modules/visitor-insights.vue'
-  import TotalRevenue from './modules/total-revenue.vue'
-  import CustomerSatisfaction from './modules/customer-satisfaction.vue'
-  import TargetVsReality from './modules/target-vs-reality.vue'
-  import TopProducts from './modules/top-products.vue'
-  import SalesMappingByCountry from './modules/sales-mapping-by-country.vue'
-  import VolumeServiceLevel from './modules/volume-service-level.vue'
-
-  defineOptions({ name: 'Analysis' })
-</script>

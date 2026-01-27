@@ -1,8 +1,16 @@
 <!-- 更新日志页面 -->
+<script setup lang="ts">
+import { upgradeLogList } from '@/mock/upgrade/changeLog'
+
+defineOptions({ name: 'ChangeLog' })
+</script>
+
 <template>
   <div class="mx-auto pt-5 mb-5">
     <!-- 标题 -->
-    <h3 class="text-2xl font-medium text-g-900 mb-8">更新日志</h3>
+    <h3 class="text-2xl font-medium text-g-900 mb-8">
+      更新日志
+    </h3>
 
     <!-- 日志列表 -->
     <div class="space-y-5">
@@ -20,7 +28,9 @@
         </div>
 
         <!-- 标题 -->
-        <h4 class="text-lg font-medium text-g-900 mb-3">{{ item.title }}</h4>
+        <h4 class="text-lg font-medium text-g-900 mb-3">
+          {{ item.title }}
+        </h4>
 
         <!-- 详情列表 -->
         <ul v-if="item.detail?.length" class="space-y-2 mb-4">
@@ -40,14 +50,10 @@
         </div>
 
         <!-- 标签 -->
-        <ElTag v-if="item.requireReLogin" type="warning" size="small">需要重新登录</ElTag>
+        <ElTag v-if="item.requireReLogin" type="warning" size="small">
+          需要重新登录
+        </ElTag>
       </div>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-  import { upgradeLogList } from '@/mock/upgrade/changeLog'
-
-  defineOptions({ name: 'ChangeLog' })
-</script>

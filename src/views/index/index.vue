@@ -1,4 +1,8 @@
 <!-- 布局容器 -->
+<script setup lang="ts">
+defineOptions({ name: 'AppLayout' })
+</script>
+
 <template>
   <div class="app-layout">
     <aside id="app-sidebar">
@@ -19,10 +23,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-  defineOptions({ name: 'AppLayout' })
-</script>
 
 <style lang="scss" scoped>
   @use './style';

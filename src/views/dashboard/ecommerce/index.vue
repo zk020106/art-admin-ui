@@ -1,4 +1,22 @@
 <!-- 电子商务页面 -->
+<script setup lang="ts">
+import AnnualSales from './modules/annual-sales.vue'
+import Banner from './modules/banner.vue'
+import CartConversionRate from './modules/cart-conversion-rate.vue'
+import HotCommodity from './modules/hot-commodity.vue'
+import HotProductsList from './modules/hot-products-list.vue'
+import ProductSales from './modules/product-sales.vue'
+import RecentTransaction from './modules/recent-transaction.vue'
+import SalesClassification from './modules/sales-classification.vue'
+import SalesGrowth from './modules/sales-growth.vue'
+import SalesTrend from './modules/sales-trend.vue'
+import TotalOrderVolume from './modules/total-order-volume.vue'
+import TotalProducts from './modules/total-products.vue'
+import TransactionList from './modules/transaction-list.vue'
+
+defineOptions({ name: 'Ecommerce' })
+</script>
+
 <template>
   <div class="ecommerce">
     <ElRow :gutter="20">
@@ -57,21 +75,3 @@
     </ElRow>
   </div>
 </template>
-
-<script setup lang="ts">
-  import Banner from './modules/banner.vue'
-  import TotalOrderVolume from './modules/total-order-volume.vue'
-  import TotalProducts from './modules/total-products.vue'
-  import SalesTrend from './modules/sales-trend.vue'
-  import SalesClassification from './modules/sales-classification.vue'
-  import TransactionList from './modules/transaction-list.vue'
-  import HotCommodity from './modules/hot-commodity.vue'
-  import RecentTransaction from './modules/recent-transaction.vue'
-  import AnnualSales from './modules/annual-sales.vue'
-  import ProductSales from './modules/product-sales.vue'
-  import SalesGrowth from './modules/sales-growth.vue'
-  import CartConversionRate from './modules/cart-conversion-rate.vue'
-  import HotProductsList from './modules/hot-products-list.vue'
-
-  defineOptions({ name: 'Ecommerce' })
-</script>

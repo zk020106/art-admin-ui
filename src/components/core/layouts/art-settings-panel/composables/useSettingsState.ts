@@ -1,5 +1,5 @@
-import { useSettingStore } from '@/store/modules/setting'
 import { MenuThemeEnum, MenuTypeEnum } from '@/enums/appEnum'
+import { useSettingStore } from '@/store/modules/setting'
 
 /**
  * 设置状态管理
@@ -32,6 +32,6 @@ export function useSettingsState() {
   return {
     // 方法
     initColorWeak,
-    switchMenuLayouts
+    switchMenuLayouts,
   }
 }

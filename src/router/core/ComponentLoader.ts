@@ -34,7 +34,7 @@ export class ComponentLoader {
 
     if (!module) {
       console.error(
-        `[ComponentLoader] 未找到组件: ${componentPath}，尝试过的路径: ${fullPath} 和 ${fullPathWithIndex}`
+        `[ComponentLoader] 未找到组件: ${componentPath}，尝试过的路径: ${fullPath} 和 ${fullPathWithIndex}`,
       )
       return this.createErrorComponent(componentPath)
     }
@@ -64,7 +64,7 @@ export class ComponentLoader {
       Promise.resolve({
         render() {
           return h('div', {})
-        }
+        },
       })
   }
 
@@ -76,7 +76,7 @@ export class ComponentLoader {
       Promise.resolve({
         render() {
           return h('div', { class: 'route-error' }, `组件未找到: ${componentPath}`)
-        }
+        },
       })
   }
 }

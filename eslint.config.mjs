@@ -7,6 +7,8 @@ export default antfu({
   },
   rules: {
     'regexp/no-unused-capturing-group': 'off',
+    'node/prefer-global/process': 'off',
+    'no-console': 'off',
   },
   ignores: [
     '**/node_modules',

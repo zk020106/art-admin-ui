@@ -1,3 +1,4 @@
+import { ElNotification } from 'element-plus'
 /**
  * 系统版本升级管理模块
  *
@@ -35,7 +36,6 @@
  * @author Art Design Pro Team
  */
 import { upgradeLogList } from '@/mock/upgrade/changeLog'
-import { ElNotification } from 'element-plus'
 import { useUserStore } from '@/store/modules/user'
 import { StorageConfig } from '@/utils/storage/storage-config'
 
@@ -89,23 +89,23 @@ class VersionManager {
   /**
    * 查找旧的存储结构
    */
-  private findLegacyStorage(): { oldSysKey: string | null; oldVersionKeys: string[] } {
+  private findLegacyStorage(): { oldSysKey: string | null, oldVersionKeys: string[] } {
     const storageKeys = Object.keys(localStorage)
     const currentVersionPrefix = StorageConfig.generateStorageKey('').slice(0, -1) // 移除末尾的 '-'
 
     // 查找旧的单一存储结构
-    const oldSysKey =
-      storageKeys.find(
-        (key) =>
-          StorageConfig.isVersionedKey(key) && key !== currentVersionPrefix && !key.includes('-')
+    const oldSysKey
+      = storageKeys.find(
+        key =>
+          StorageConfig.isVersionedKey(key) && key !== currentVersionPrefix && !key.includes('-'),
       ) || null
 
     // 查找旧版本的分离存储键
     const oldVersionKeys = storageKeys.filter(
-      (key) =>
-        StorageConfig.isVersionedKey(key) &&
-        !StorageConfig.isCurrentVersionKey(key) &&
-        key.includes('-')
+      key =>
+        StorageConfig.isVersionedKey(key)
+        && !StorageConfig.isCurrentVersionKey(key)
+        && key.includes('-'),
     )
 
     return { oldSysKey, oldVersionKeys }
@@ -136,12 +136,12 @@ class VersionManager {
       `<p style="color: var(--art-gray-800) !important; padding-bottom: 5px;">`,
       `系统已升级到 ${StorageConfig.CURRENT_VERSION} 版本，此次更新带来了以下改进：`,
       `</p>`,
-      content
+      content,
     ]
 
     if (requireReLogin) {
       messageParts.push(
-        `<p style="color: var(--theme-color); padding-top: 5px;">升级完成，请重新登录后继续使用。</p>`
+        `<p style="color: var(--theme-color); padding-top: 5px;">升级完成，请重新登录后继续使用。</p>`,
       )
     }
 
@@ -157,7 +157,7 @@ class VersionManager {
       message,
       duration: 0,
       type: 'success',
-      dangerouslyUseHTMLString: true
+      dangerouslyUseHTMLString: true,
     })
   }
 
@@ -185,7 +185,8 @@ class VersionManager {
     try {
       useUserStore().logOut()
       console.info('[Upgrade] 已执行升级后登出')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('[Upgrade] 升级后登出失败:', error)
     }
   }
@@ -195,7 +196,7 @@ class VersionManager {
    */
   private async executeUpgrade(
     storedVersion: string,
-    legacyStorage: ReturnType<typeof this.findLegacyStorage>
+    legacyStorage: ReturnType<typeof this.findLegacyStorage>,
   ): Promise<void> {
     try {
       if (!upgradeLogList.value.length) {
@@ -221,7 +222,8 @@ class VersionManager {
       }
 
       console.info(`[Upgrade] 升级完成: ${storedVersion} → ${StorageConfig.CURRENT_VERSION}`)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('[Upgrade] 系统升级处理失败:', error)
     }
   }

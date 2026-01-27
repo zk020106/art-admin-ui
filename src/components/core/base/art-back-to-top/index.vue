@@ -1,4 +1,25 @@
 <!-- 返回顶部按钮 -->
+<script setup lang="ts">
+import { useCommon } from '@/hooks/core/useCommon'
+
+defineOptions({ name: 'ArtBackToTop' })
+
+const { scrollToTop } = useCommon()
+
+const showButton = ref(false)
+const scrollThreshold = 300
+
+onMounted(() => {
+  const scrollContainer = document.getElementById('app-main')
+  if (scrollContainer) {
+    const { y } = useScroll(scrollContainer)
+    watch(y, (newY: number) => {
+      showButton.value = newY > scrollThreshold
+    })
+  }
+})
+</script>
+
 <template>
   <Transition
     enter-active-class="tad-300 ease-out"
@@ -17,24 +38,3 @@
     </div>
   </Transition>
 </template>
-
-<script setup lang="ts">
-  import { useCommon } from '@/hooks/core/useCommon'
-
-  defineOptions({ name: 'ArtBackToTop' })
-
-  const { scrollToTop } = useCommon()
-
-  const showButton = ref(false)
-  const scrollThreshold = 300
-
-  onMounted(() => {
-    const scrollContainer = document.getElementById('app-main')
-    if (scrollContainer) {
-      const { y } = useScroll(scrollContainer)
-      watch(y, (newY: number) => {
-        showButton.value = newY > scrollThreshold
-      })
-    }
-  })
-</script>

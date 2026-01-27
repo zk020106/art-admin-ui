@@ -8,11 +8,11 @@
     </div>
 
     <ArtBarChart
-      :showAxisLabel="false"
-      :showAxisLine="false"
-      :showSplitLine="false"
+      :show-axis-label="false"
+      :show-axis-line="false"
+      :show-split-line="false"
       :data="[50, 80, 50, 90, 60, 70, 50]"
-      barWidth="26px"
+      bar-width="26px"
       height="calc(100% - 155px)"
     />
     <div class="flex justify-around mt-10">
@@ -21,7 +21,9 @@
           <ArtSvgIcon icon="ri:money-cny-circle-line" class="text-xl" />
         </div>
         <div>
-          <p class="text-lg">¥200,858</p>
+          <p class="text-lg">
+            ¥200,858
+          </p>
           <span class="text-sm">线上销售</span>
         </div>
       </div>
@@ -30,7 +32,9 @@
           <ArtSvgIcon icon="ri:heart-3-line" class="text-xl" />
         </div>
         <div>
-          <p class="text-lg">¥102,927</p>
+          <p class="text-lg">
+            ¥102,927
+          </p>
           <span class="text-sm">线下销售</span>
         </div>
       </div>

@@ -11,11 +11,11 @@
     </div>
 
     <ArtBarChart
-      :showAxisLabel="false"
-      :showAxisLine="false"
-      :showSplitLine="false"
+      :show-axis-label="false"
+      :show-axis-line="false"
+      :show-split-line="false"
       :data="[50, 80, 50, 90, 60, 70, 50]"
-      barWidth="16px"
+      bar-width="16px"
       height="5.6rem"
     />
   </div>

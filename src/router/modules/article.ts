@@ -1,4 +1,4 @@
-import { AppRouteRecord } from '@/types/router'
+import type { AppRouteRecord } from '@/types/router'
 
 export const articleRoutes: AppRouteRecord = {
   path: '/article',
@@ -7,7 +7,7 @@ export const articleRoutes: AppRouteRecord = {
   meta: {
     title: 'menus.article.title',
     icon: 'ri:book-2-line',
-    roles: ['R_SUPER', 'R_ADMIN']
+    roles: ['R_SUPER', 'R_ADMIN'],
   },
   children: [
     {
@@ -20,9 +20,9 @@ export const articleRoutes: AppRouteRecord = {
         keepAlive: true,
         authList: [
           { title: '新增', authMark: 'add' },
-          { title: '编辑', authMark: 'edit' }
-        ]
-      }
+          { title: '编辑', authMark: 'edit' },
+        ],
+      },
     },
     {
       path: 'detail/:id',
@@ -32,8 +32,8 @@ export const articleRoutes: AppRouteRecord = {
         title: 'menus.article.articleDetail',
         isHide: true,
         keepAlive: true,
-        activePath: '/article/article-list'
-      }
+        activePath: '/article/article-list',
+      },
     },
     {
       path: 'comment',
@@ -42,8 +42,8 @@ export const articleRoutes: AppRouteRecord = {
       meta: {
         title: 'menus.article.comment',
         icon: 'ri:mail-line',
-        keepAlive: true
-      }
+        keepAlive: true,
+      },
     },
     {
       path: 'publish',
@@ -53,8 +53,8 @@ export const articleRoutes: AppRouteRecord = {
         title: 'menus.article.articlePublish',
         icon: 'ri:telegram-2-line',
         keepAlive: true,
-        authList: [{ title: '发布', authMark: 'add' }]
-      }
-    }
-  ]
+        authList: [{ title: '发布', authMark: 'add' }],
+      },
+    },
+  ],
 }

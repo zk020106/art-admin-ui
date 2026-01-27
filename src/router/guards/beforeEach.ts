@@ -35,23 +35,23 @@
  * @module router/guards/beforeEach
  * @author Art Design Pro Team
  */
-import type { Router, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
-import { nextTick } from 'vue'
+import type { NavigationGuardNext, RouteLocationNormalized, Router } from 'vue-router'
 import NProgress from 'nprogress'
+import { nextTick } from 'vue'
+import { fetchGetUserInfo } from '@/api/auth'
+import { useCommon } from '@/hooks/core/useCommon'
+import { useMenuStore } from '@/store/modules/menu'
 import { useSettingStore } from '@/store/modules/setting'
 import { useUserStore } from '@/store/modules/user'
-import { useMenuStore } from '@/store/modules/menu'
+import { useWorktabStore } from '@/store/modules/worktab'
+import { isHttpError } from '@/utils/http/error'
+import { ApiStatus } from '@/utils/http/status'
 import { setWorktab } from '@/utils/navigation'
 import { setPageTitle } from '@/utils/router'
-import { RoutesAlias } from '../routesAlias'
-import { staticRoutes } from '../routes/staticRoutes'
 import { loadingService } from '@/utils/ui'
-import { useCommon } from '@/hooks/core/useCommon'
-import { useWorktabStore } from '@/store/modules/worktab'
-import { fetchGetUserInfo } from '@/api/auth'
-import { ApiStatus } from '@/utils/http/status'
-import { isHttpError } from '@/utils/http/error'
-import { RouteRegistry, MenuProcessor, IframeRouteManager, RoutePermissionValidator } from '../core'
+import { IframeRouteManager, MenuProcessor, RoutePermissionValidator, RouteRegistry } from '../core'
+import { staticRoutes } from '../routes/staticRoutes'
+import { RoutesAlias } from '../routesAlias'
 
 // 路由注册器实例
 let routeRegistry: RouteRegistry | null = null
@@ -109,16 +109,17 @@ export function setupBeforeEachGuard(router: Router): void {
     async (
       to: RouteLocationNormalized,
       from: RouteLocationNormalized,
-      next: NavigationGuardNext
+      next: NavigationGuardNext,
     ) => {
       try {
         await handleRouteGuard(to, from, next, router)
-      } catch (error) {
+      }
+      catch (error) {
         console.error('[RouteGuard] 路由守卫处理失败:', error)
         closeLoading()
         next({ name: 'Exception500' })
       }
-    }
+    },
   )
 }
 
@@ -141,7 +142,7 @@ async function handleRouteGuard(
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
-  router: Router
+  router: Router,
 ): Promise<void> {
   const settingStore = useSettingStore()
   const userStore = useUserStore()
@@ -161,7 +162,8 @@ async function handleRouteGuard(
     // 已经失败过，直接放行到错误页面，不再重试
     if (to.matched.length > 0) {
       next()
-    } else {
+    }
+    else {
       // 未匹配到路由，跳转到 500 页面
       next({ name: 'Exception500', replace: true })
     }
@@ -204,7 +206,7 @@ async function handleRouteGuard(
 function handleLoginStatus(
   to: RouteLocationNormalized,
   userStore: ReturnType<typeof useUserStore>,
-  next: NavigationGuardNext
+  next: NavigationGuardNext,
 ): boolean {
   // 已登录或访问登录页或静态路由，直接放行
   if (userStore.isLogin || to.path === RoutesAlias.Login || isStaticRoute(to.path)) {
@@ -215,7 +217,7 @@ function handleLoginStatus(
   userStore.logOut()
   next({
     name: 'Login',
-    query: { redirect: to.fullPath }
+    query: { redirect: to.fullPath },
   })
   return false
 }
@@ -250,7 +252,7 @@ function isStaticRoute(path: string): boolean {
 async function handleDynamicRoutes(
   to: RouteLocationNormalized,
   next: NavigationGuardNext,
-  router: Router
+  router: Router,
 ): Promise<void> {
   // 标记初始化进行中
   routeInitInProgress = true
@@ -290,7 +292,7 @@ async function handleDynamicRoutes(
     const { path: validatedPath, hasPermission } = RoutePermissionValidator.validatePath(
       to.path,
       menuList,
-      homePath.value || '/'
+      homePath.value || '/',
     )
 
     // 初始化成功，重置进行中标记
@@ -307,18 +309,20 @@ async function handleDynamicRoutes(
       // 直接跳转到首页
       next({
         path: validatedPath,
-        replace: true
+        replace: true,
       })
-    } else {
+    }
+    else {
       // 有权限，正常导航
       next({
         path: to.path,
         query: to.query,
         hash: to.hash,
-        replace: true
+        replace: true,
       })
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('[RouteGuard] 动态路由注册失败:', error)
 
     // 关闭 loading

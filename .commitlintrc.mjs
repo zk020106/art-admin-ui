@@ -19,14 +19,14 @@ const allowedScopes = [
   'docs',
   'test',
   'deps',
-  'other'
+  'other',
 ]
 
 const scopeComplete = execSync('git status --porcelain || true')
   .toString()
   .trim()
   .split('\n')
-  .find((r) => ~r.indexOf('M  src'))
+  .find(r => ~r.indexOf('M  src'))
   ?.replaceAll(/(\/)/g, '%%')
   ?.match(/src%%((\w|-)*)/)?.[1]
   ?.replace(/s$/, '')
@@ -43,7 +43,7 @@ const config = {
       c: 'chore: update config',
       f: 'docs: fix typos',
       r: 'docs: update README',
-      s: 'style: update code format'
+      s: 'style: update code format',
     },
 
     allowCustomIssuePrefix: false,
@@ -55,8 +55,8 @@ const config = {
     typesAppend: [
       { value: 'workflow', name: 'workflow: workflow improvements' },
       { value: 'types', name: 'types: type definition changes' },
-      { value: 'wip', name: 'wip: work in progress' }
-    ]
+      { value: 'wip', name: 'wip: work in progress' },
+    ],
   },
 
   rules: {
@@ -71,7 +71,7 @@ const config = {
           return [true]
         }
         return [false, `scope must be one of: ${allowedScopes.join(', ')}`]
-      }
+      },
     ],
     'scope-enum': [0],
     'subject-case': [0],
@@ -94,10 +94,10 @@ const config = {
         'revert', // 回滚
         'workflow', // 工作流
         'types', // 类型定义
-        'wip' // 开发中
-      ]
-    ]
-  }
+        'wip', // 开发中
+      ],
+    ],
+  },
 }
 
 export default config

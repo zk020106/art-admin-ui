@@ -1,3 +1,186 @@
+<script setup lang="ts">
+defineOptions({ name: 'WidgetsWangEditor' })
+
+const fullEditorRef = ref()
+const simpleEditorRef = ref()
+const fullActiveTab = ref('preview')
+const simpleActiveTab = ref('preview')
+const activeCollapse = ref(['basic'])
+
+/**
+ * 简化工具栏配置
+ * 只包含基础的编辑功能
+ */
+const simpleToolbarKeys = [
+  'bold',
+  'italic',
+  'underline',
+  '|',
+  'bulletedList',
+  'numberedList',
+  '|',
+  'insertLink',
+  'insertImage',
+  '|',
+  'undo',
+  'redo',
+]
+
+// 完整编辑器内容
+const fullEditorHtml = ref(`<h1>🎨 完整工具栏编辑器示例</h1>
+<p>这个编辑器包含所有功能，您可以体验丰富的格式编辑功能。</p>
+
+<h2>✨ 文本样式</h2>
+<p><strong>这是加粗的文字</strong></p>
+<p><em>这是斜体文字</em></p>
+<p><u>这是下划线文字</u></p>
+<p><span style="color: rgb(194, 79, 74);">这是彩色文字</span></p>
+
+<h2>📝 列表和待办</h2>
+<ul>
+  <li>无序列表项 1</li>
+  <li>无序列表项 2</li>
+</ul>
+
+<ol>
+  <li>有序列表项 1</li>
+  <li>有序列表项 2</li>
+</ol>
+
+<ul class="w-e-todo">
+  <li class="w-e-todo-item"><input type="checkbox" checked="true" readonly="true" disabled="disabled"><span>已完成的任务</span></li>
+  <li class="w-e-todo-item"><input type="checkbox" readonly="true" disabled="disabled"><span>待完成的任务</span></li>
+</ul>
+
+<h2>💬 引用和表格</h2>
+<blockquote>
+  这是一段引用文字，展示引用格式的效果。
+</blockquote>
+
+<table style="border-collapse: collapse; width: 100%;" border="1">
+  <thead>
+    <tr><th>功能</th><th>描述</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>完整工具栏</td><td>包含所有编辑功能</td></tr>
+    <tr><td>自定义配置</td><td>支持灵活的工具栏配置</td></tr>
+  </tbody>
+</table>
+
+<h2>💻 代码块</h2>
+<pre><code class="language-javascript">// 完整编辑器支持代码高亮
+function createEditor() {
+  return new WangEditor({
+    container: '#editor',
+    toolbar: 'full' // 完整工具栏
+  });
+}</code></pre>
+
+<p>🔗 <a href="https://www.wangeditor.com/" target="_blank">访问官网了解更多</a></p>`)
+
+// 简化编辑器内容
+const simpleEditorHtml = ref(`<h1>✨ 简化工具栏编辑器示例</h1>
+<p>这个编辑器只包含基础的编辑功能，界面更加简洁。</p>
+
+<h2>基础文本格式</h2>
+<p><strong>加粗文字</strong></p>
+<p><em>斜体文字</em></p>
+<p><u>下划线文字</u></p>
+
+<h2>列表功能</h2>
+<ul>
+  <li>无序列表项 1</li>
+  <li>无序列表项 2</li>
+</ul>
+
+<ol>
+  <li>有序列表项 1</li>
+  <li>有序列表项 2</li>
+</ol>
+
+<h2>链接和图片</h2>
+<p>支持插入 <a href="https://www.wangeditor.com/" target="_blank">链接</a> 和图片。</p>
+
+<p>简化版编辑器专注于基础功能，适合简单的内容编辑需求。</p>`)
+
+/**
+ * 清空完整编辑器内容
+ */
+function clearFullEditor() {
+  fullEditorRef.value?.clear()
+  ElMessage.success('完整编辑器已清空')
+}
+
+/**
+ * 获取完整编辑器内容
+ */
+function getFullEditorContent() {
+  const content = fullEditorRef.value?.getHtml()
+  console.log('完整编辑器内容:', content)
+  ElMessage.success('完整编辑器内容已输出到控制台')
+}
+
+/**
+ * 设置完整编辑器演示内容
+ */
+function setFullEditorDemo() {
+  const demoContent = `<h2>🎉 完整编辑器演示内容</h2>
+<p>这是通过方法设置的演示内容，展示完整编辑器的强大功能。</p>
+<ul>
+  <li>支持丰富的文本格式</li>
+  <li>包含表格、代码块等高级功能</li>
+  <li>提供完整的编辑体验</li>
+</ul>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+  <tr><th>特性</th><th>状态</th></tr>
+  <tr><td>完整工具栏</td><td>✅ 已启用</td></tr>
+  <tr><td>高级功能</td><td>✅ 已启用</td></tr>
+</table>`
+
+  fullEditorRef.value?.setHtml(demoContent)
+  ElMessage.success('已设置完整编辑器演示内容')
+}
+
+/**
+ * 清空简化编辑器内容
+ */
+function clearSimpleEditor() {
+  simpleEditorRef.value?.clear()
+  ElMessage.success('简化编辑器已清空')
+}
+
+/**
+ * 获取简化编辑器内容
+ */
+function getSimpleEditorContent() {
+  const content = simpleEditorRef.value?.getHtml()
+  console.log('简化编辑器内容:', content)
+  ElMessage.success('简化编辑器内容已输出到控制台')
+}
+
+/**
+ * 设置简化编辑器演示内容
+ */
+function setSimpleEditorDemo() {
+  const demoContent = `<h2>⚡ 简化编辑器演示内容</h2>
+<p>这是通过方法设置的演示内容，展示简化编辑器的核心功能。</p>
+<ul>
+  <li><strong>基础格式</strong>：加粗、斜体、下划线</li>
+  <li><em>列表支持</em>：有序和无序列表</li>
+  <li><u>媒体插入</u>：链接和图片</li>
+</ul>
+<ol>
+  <li>界面简洁清爽</li>
+  <li>功能专注实用</li>
+  <li>适合快速编辑</li>
+</ol>
+<p>🔗 <a href="https://example.com" target="_blank">这是一个链接示例</a></p>`
+
+  simpleEditorRef.value?.setHtml(demoContent)
+  ElMessage.success('已设置简化编辑器演示内容')
+}
+</script>
+
 <template>
   <div class="page-content mb-5">
     <!-- 完整工具栏编辑器 -->
@@ -6,9 +189,15 @@
         <div class="card-header">
           <span>🛠️ 完整工具栏编辑器</span>
           <div class="header-buttons">
-            <ElButton size="small" @click="clearFullEditor">清空</ElButton>
-            <ElButton size="small" @click="getFullEditorContent">获取内容</ElButton>
-            <ElButton size="small" @click="setFullEditorDemo">设置示例</ElButton>
+            <ElButton size="small" @click="clearFullEditor">
+              清空
+            </ElButton>
+            <ElButton size="small" @click="getFullEditorContent">
+              获取内容
+            </ElButton>
+            <ElButton size="small" @click="setFullEditorDemo">
+              设置示例
+            </ElButton>
           </div>
         </div>
       </template>
@@ -28,9 +217,15 @@
         <div class="card-header">
           <span>✨ 简化工具栏编辑器</span>
           <div class="header-buttons">
-            <ElButton size="small" @click="clearSimpleEditor">清空</ElButton>
-            <ElButton size="small" @click="getSimpleEditorContent">获取内容</ElButton>
-            <ElButton size="small" @click="setSimpleEditorDemo">设置示例</ElButton>
+            <ElButton size="small" @click="clearSimpleEditor">
+              清空
+            </ElButton>
+            <ElButton size="small" @click="getSimpleEditorContent">
+              获取内容
+            </ElButton>
+            <ElButton size="small" @click="setSimpleEditorDemo">
+              设置示例
+            </ElButton>
           </div>
         </div>
       </template>
@@ -55,7 +250,7 @@
           <h3>完整编辑器内容</h3>
           <ElTabs v-model="fullActiveTab">
             <ElTabPane label="渲染效果" name="preview">
-              <div class="content-preview" v-html="fullEditorHtml"></div>
+              <div class="content-preview" v-html="fullEditorHtml" />
             </ElTabPane>
             <ElTabPane label="HTML源码" name="html">
               <ElInput
@@ -73,7 +268,7 @@
           <h3>简化编辑器内容</h3>
           <ElTabs v-model="simpleActiveTab">
             <ElTabPane label="渲染效果" name="preview">
-              <div class="content-preview" v-html="simpleEditorHtml"></div>
+              <div class="content-preview" v-html="simpleEditorHtml" />
             </ElTabPane>
             <ElTabPane label="HTML源码" name="html">
               <ElInput
@@ -200,7 +395,9 @@
                   <li>插入：链接、图片</li>
                   <li>操作：撤销、重做</li>
                 </ul>
-                <p class="note">适用于简单的文本编辑场景，界面更清爽。</p>
+                <p class="note">
+                  适用于简单的文本编辑场景，界面更清爽。
+                </p>
               </ElCol>
             </ElRow>
           </div>
@@ -209,189 +406,6 @@
     </ElCard>
   </div>
 </template>
-
-<script setup lang="ts">
-  defineOptions({ name: 'WidgetsWangEditor' })
-
-  const fullEditorRef = ref()
-  const simpleEditorRef = ref()
-  const fullActiveTab = ref('preview')
-  const simpleActiveTab = ref('preview')
-  const activeCollapse = ref(['basic'])
-
-  /**
-   * 简化工具栏配置
-   * 只包含基础的编辑功能
-   */
-  const simpleToolbarKeys = [
-    'bold',
-    'italic',
-    'underline',
-    '|',
-    'bulletedList',
-    'numberedList',
-    '|',
-    'insertLink',
-    'insertImage',
-    '|',
-    'undo',
-    'redo'
-  ]
-
-  // 完整编辑器内容
-  const fullEditorHtml = ref(`<h1>🎨 完整工具栏编辑器示例</h1>
-<p>这个编辑器包含所有功能，您可以体验丰富的格式编辑功能。</p>
-
-<h2>✨ 文本样式</h2>
-<p><strong>这是加粗的文字</strong></p>
-<p><em>这是斜体文字</em></p>
-<p><u>这是下划线文字</u></p>
-<p><span style="color: rgb(194, 79, 74);">这是彩色文字</span></p>
-
-<h2>📝 列表和待办</h2>
-<ul>
-  <li>无序列表项 1</li>
-  <li>无序列表项 2</li>
-</ul>
-
-<ol>
-  <li>有序列表项 1</li>
-  <li>有序列表项 2</li>
-</ol>
-
-<ul class="w-e-todo">
-  <li class="w-e-todo-item"><input type="checkbox" checked="true" readonly="true" disabled="disabled"><span>已完成的任务</span></li>
-  <li class="w-e-todo-item"><input type="checkbox" readonly="true" disabled="disabled"><span>待完成的任务</span></li>
-</ul>
-
-<h2>💬 引用和表格</h2>
-<blockquote>
-  这是一段引用文字，展示引用格式的效果。
-</blockquote>
-
-<table style="border-collapse: collapse; width: 100%;" border="1">
-  <thead>
-    <tr><th>功能</th><th>描述</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>完整工具栏</td><td>包含所有编辑功能</td></tr>
-    <tr><td>自定义配置</td><td>支持灵活的工具栏配置</td></tr>
-  </tbody>
-</table>
-
-<h2>💻 代码块</h2>
-<pre><code class="language-javascript">// 完整编辑器支持代码高亮
-function createEditor() {
-  return new WangEditor({
-    container: '#editor',
-    toolbar: 'full' // 完整工具栏
-  });
-}</code></pre>
-
-<p>🔗 <a href="https://www.wangeditor.com/" target="_blank">访问官网了解更多</a></p>`)
-
-  // 简化编辑器内容
-  const simpleEditorHtml = ref(`<h1>✨ 简化工具栏编辑器示例</h1>
-<p>这个编辑器只包含基础的编辑功能，界面更加简洁。</p>
-
-<h2>基础文本格式</h2>
-<p><strong>加粗文字</strong></p>
-<p><em>斜体文字</em></p>
-<p><u>下划线文字</u></p>
-
-<h2>列表功能</h2>
-<ul>
-  <li>无序列表项 1</li>
-  <li>无序列表项 2</li>
-</ul>
-
-<ol>
-  <li>有序列表项 1</li>
-  <li>有序列表项 2</li>
-</ol>
-
-<h2>链接和图片</h2>
-<p>支持插入 <a href="https://www.wangeditor.com/" target="_blank">链接</a> 和图片。</p>
-
-<p>简化版编辑器专注于基础功能，适合简单的内容编辑需求。</p>`)
-
-  /**
-   * 清空完整编辑器内容
-   */
-  const clearFullEditor = () => {
-    fullEditorRef.value?.clear()
-    ElMessage.success('完整编辑器已清空')
-  }
-
-  /**
-   * 获取完整编辑器内容
-   */
-  const getFullEditorContent = () => {
-    const content = fullEditorRef.value?.getHtml()
-    console.log('完整编辑器内容:', content)
-    ElMessage.success('完整编辑器内容已输出到控制台')
-  }
-
-  /**
-   * 设置完整编辑器演示内容
-   */
-  const setFullEditorDemo = () => {
-    const demoContent = `<h2>🎉 完整编辑器演示内容</h2>
-<p>这是通过方法设置的演示内容，展示完整编辑器的强大功能。</p>
-<ul>
-  <li>支持丰富的文本格式</li>
-  <li>包含表格、代码块等高级功能</li>
-  <li>提供完整的编辑体验</li>
-</ul>
-<table style="border-collapse: collapse; width: 100%;" border="1">
-  <tr><th>特性</th><th>状态</th></tr>
-  <tr><td>完整工具栏</td><td>✅ 已启用</td></tr>
-  <tr><td>高级功能</td><td>✅ 已启用</td></tr>
-</table>`
-
-    fullEditorRef.value?.setHtml(demoContent)
-    ElMessage.success('已设置完整编辑器演示内容')
-  }
-
-  /**
-   * 清空简化编辑器内容
-   */
-  const clearSimpleEditor = () => {
-    simpleEditorRef.value?.clear()
-    ElMessage.success('简化编辑器已清空')
-  }
-
-  /**
-   * 获取简化编辑器内容
-   */
-  const getSimpleEditorContent = () => {
-    const content = simpleEditorRef.value?.getHtml()
-    console.log('简化编辑器内容:', content)
-    ElMessage.success('简化编辑器内容已输出到控制台')
-  }
-
-  /**
-   * 设置简化编辑器演示内容
-   */
-  const setSimpleEditorDemo = () => {
-    const demoContent = `<h2>⚡ 简化编辑器演示内容</h2>
-<p>这是通过方法设置的演示内容，展示简化编辑器的核心功能。</p>
-<ul>
-  <li><strong>基础格式</strong>：加粗、斜体、下划线</li>
-  <li><em>列表支持</em>：有序和无序列表</li>
-  <li><u>媒体插入</u>：链接和图片</li>
-</ul>
-<ol>
-  <li>界面简洁清爽</li>
-  <li>功能专注实用</li>
-  <li>适合快速编辑</li>
-</ol>
-<p>🔗 <a href="https://example.com" target="_blank">这是一个链接示例</a></p>`
-
-    simpleEditorRef.value?.setHtml(demoContent)
-    ElMessage.success('已设置简化编辑器演示内容')
-  }
-</script>
 
 <style lang="scss" scoped>
   .page-content {

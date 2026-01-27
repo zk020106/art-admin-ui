@@ -48,7 +48,7 @@ export function scriptErrorHandler(
   source?: string,
   lineno?: number,
   colno?: number,
-  error?: Error
+  error?: Error,
 ): boolean {
   console.error('[ScriptError]', { message, source, lineno, colno, error })
   // reportError({ type: 'script', message, source, lineno, colno, error })
@@ -74,20 +74,20 @@ export function registerResourceErrorHandler() {
     (event: Event) => {
       const target = event.target as HTMLElement
       if (
-        target &&
-        (target.tagName === 'IMG' || target.tagName === 'SCRIPT' || target.tagName === 'LINK')
+        target
+        && (target.tagName === 'IMG' || target.tagName === 'SCRIPT' || target.tagName === 'LINK')
       ) {
         console.error('[ResourceError]', {
           tagName: target.tagName,
           src:
-            (target as HTMLImageElement).src ||
-            (target as HTMLScriptElement).src ||
-            (target as HTMLLinkElement).href
+            (target as HTMLImageElement).src
+            || (target as HTMLScriptElement).src
+            || (target as HTMLLinkElement).href,
         })
         // reportError({ type: 'resource', target })
       }
     },
-    true // 捕获阶段才能监听到资源错误
+    true, // 捕获阶段才能监听到资源错误
   )
 }
 

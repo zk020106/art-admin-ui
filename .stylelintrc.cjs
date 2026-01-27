@@ -5,18 +5,18 @@ module.exports = {
     'stylelint-config-recommended-scss',
     'stylelint-config-recommended-vue/scss',
     'stylelint-config-html/vue',
-    'stylelint-config-recess-order'
+    'stylelint-config-recess-order',
   ],
   // 指定不同文件对应的解析器
   overrides: [
     {
       files: ['**/*.{vue,html}'],
-      customSyntax: 'postcss-html'
+      customSyntax: 'postcss-html',
     },
     {
       files: ['**/*.{css,scss}'],
-      customSyntax: 'postcss-scss'
-    }
+      customSyntax: 'postcss-scss',
+    },
   ],
   // 自定义规则
   rules: {
@@ -31,15 +31,15 @@ module.exports = {
     'selector-pseudo-class-no-unknown': [
       true,
       {
-        ignorePseudoClasses: ['global', 'export', 'deep']
-      }
+        ignorePseudoClasses: ['global', 'export', 'deep'],
+      },
     ],
     // 允许未知属性
     'property-no-unknown': [
       true,
       {
-        ignoreProperties: []
-      }
+        ignoreProperties: [],
+      },
     ],
     // 允许未知规则
     'at-rule-no-unknown': [
@@ -56,9 +56,9 @@ module.exports = {
           'else',
           'for',
           'while',
-          'reference'
-        ]
-      }
+          'reference',
+        ],
+      },
     ],
     'scss/at-rule-no-unknown': [
       true,
@@ -74,9 +74,9 @@ module.exports = {
           'else',
           'for',
           'while',
-          'reference'
-        ]
-      }
-    ]
-  }
+          'reference',
+        ],
+      },
+    ],
+  },
 }

@@ -11,7 +11,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "lint": "eslint",
-    "fix": "eslint --fix",
+    "format": "eslint --fix",
     "lint:stylelint": "stylelint  \"**/*.{css,scss,vue}\" --fix",
     "commit": "czg",
     "clean:dev": "tsx scripts/clean-dev.ts",

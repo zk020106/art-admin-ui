@@ -1,30 +1,30 @@
 // scripts/clean-dev.ts
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 // 现代化颜色主题
 const theme = {
   // 基础颜色
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  dim: '\x1b[2m',
+  reset: '\x1B[0m',
+  bold: '\x1B[1m',
+  dim: '\x1B[2m',
 
   // 前景色
-  primary: '\x1b[38;5;75m', // 亮蓝色
-  success: '\x1b[38;5;82m', // 亮绿色
-  warning: '\x1b[38;5;220m', // 亮黄色
-  error: '\x1b[38;5;196m', // 亮红色
-  info: '\x1b[38;5;159m', // 青色
-  purple: '\x1b[38;5;141m', // 紫色
-  orange: '\x1b[38;5;208m', // 橙色
-  gray: '\x1b[38;5;245m', // 灰色
-  white: '\x1b[38;5;255m', // 白色
+  primary: '\x1B[38;5;75m', // 亮蓝色
+  success: '\x1B[38;5;82m', // 亮绿色
+  warning: '\x1B[38;5;220m', // 亮黄色
+  error: '\x1B[38;5;196m', // 亮红色
+  info: '\x1B[38;5;159m', // 青色
+  purple: '\x1B[38;5;141m', // 紫色
+  orange: '\x1B[38;5;208m', // 橙色
+  gray: '\x1B[38;5;245m', // 灰色
+  white: '\x1B[38;5;255m', // 白色
 
   // 背景色
-  bgDark: '\x1b[48;5;235m', // 深灰背景
-  bgBlue: '\x1b[48;5;24m', // 蓝色背景
-  bgGreen: '\x1b[48;5;22m', // 绿色背景
-  bgRed: '\x1b[48;5;52m' // 红色背景
+  bgDark: '\x1B[48;5;235m', // 深灰背景
+  bgBlue: '\x1B[48;5;24m', // 蓝色背景
+  bgGreen: '\x1B[48;5;22m', // 绿色背景
+  bgRed: '\x1B[48;5;52m', // 红色背景
 }
 
 // 现代化图标集
@@ -56,7 +56,7 @@ const icons = {
   check: '✓',
   cross: '✗',
   arrow: '→',
-  loading: '⏳'
+  loading: '⏳',
 }
 
 // 格式化工具
@@ -77,39 +77,39 @@ const fmt = {
 
   // 渐变效果模拟
   gradient: (text: string) => {
-    const colors = ['\x1b[38;5;75m', '\x1b[38;5;81m', '\x1b[38;5;87m', '\x1b[38;5;159m']
+    const colors = ['\x1B[38;5;75m', '\x1B[38;5;81m', '\x1B[38;5;87m', '\x1B[38;5;159m']
     const chars = text.split('')
     return chars.map((char, i) => `${colors[i % colors.length]}${char}`).join('') + theme.reset
-  }
+  },
 }
 
 // 创建现代化标题横幅
 function createModernBanner() {
   console.log()
   console.log(
-    fmt.gradient('  ╔══════════════════════════════════════════════════════════════════╗')
+    fmt.gradient('  ╔══════════════════════════════════════════════════════════════════╗'),
   )
   console.log(
-    fmt.gradient('  ║                                                                  ║')
+    fmt.gradient('  ║                                                                  ║'),
   )
   console.log(
-    `  ║               ${icons.rocket} ${fmt.title('ART DESIGN PRO')} ${fmt.subtitle('· 代码精简程序')} ${icons.magic}                ║`
+    `  ║               ${icons.rocket} ${fmt.title('ART DESIGN PRO')} ${fmt.subtitle('· 代码精简程序')} ${icons.magic}                ║`,
   )
   console.log(
-    `  ║               ${fmt.dim('为项目移除演示数据，快速切换至开发模式')}             ║`
+    `  ║               ${fmt.dim('为项目移除演示数据，快速切换至开发模式')}             ║`,
   )
   console.log(
-    fmt.gradient('  ║                                                                  ║')
+    fmt.gradient('  ║                                                                  ║'),
   )
   console.log(
-    fmt.gradient('  ╚══════════════════════════════════════════════════════════════════╝')
+    fmt.gradient('  ╚══════════════════════════════════════════════════════════════════╝'),
   )
   console.log()
 }
 
 // 创建分割线
 function createDivider(char = '─', color = theme.primary) {
-  console.log(`${color}${'  ' + char.repeat(66)}${theme.reset}`)
+  console.log(`${color}${`  ${char.repeat(66)}`}${theme.reset}`)
 }
 
 // 创建卡片样式容器
@@ -132,7 +132,7 @@ function createProgressBar(current: number, total: number, text: string, width =
   const emptyBar = '░'.repeat(empty)
 
   process.stdout.write(
-    `\r  ${fmt.info('进度')} [${theme.success}${filledBar}${theme.gray}${emptyBar}${theme.reset}] ${fmt.highlight(percentage + '%')})}`
+    `\r  ${fmt.info('进度')} [${theme.success}${filledBar}${theme.gray}${emptyBar}${theme.reset}] ${fmt.highlight(`${percentage}%`)})}`,
   )
 
   if (current === total) {
@@ -146,7 +146,7 @@ const stats = {
   deletedPaths: 0,
   failedPaths: 0,
   startTime: Date.now(),
-  totalFiles: 0
+  totalFiles: 0,
 }
 
 // 清理目标
@@ -172,7 +172,7 @@ const targets = [
   'src/assets/images/safeguard',
   'src/assets/images/3d',
   'src/components/core/charts/art-map-chart',
-  'src/components/business/comment-widget'
+  'src/components/business/comment-widget',
 ]
 
 // 递归统计文件数量
@@ -184,7 +184,8 @@ async function countFiles(targetPath: string): Promise<number> {
 
     if (stat.isFile()) {
       return 1
-    } else if (stat.isDirectory()) {
+    }
+    else if (stat.isDirectory()) {
       const entries = await fs.readdir(fullPath)
       let count = 0
 
@@ -195,7 +196,8 @@ async function countFiles(targetPath: string): Promise<number> {
 
       return count
     }
-  } catch {
+  }
+  catch {
     return 0
   }
 
@@ -225,12 +227,13 @@ async function remove(targetPath: string, index: number) {
     await fs.rm(fullPath, { recursive: true, force: true })
     stats.deletedFiles += fileCount
     stats.deletedPaths++
-    await new Promise((resolve) => setTimeout(resolve, 50))
-  } catch (err) {
+    await new Promise(resolve => setTimeout(resolve, 50))
+  }
+  catch (err) {
     stats.failedPaths++
     console.log()
     console.log(`     ${icons.error} ${fmt.error('删除失败')}: ${fmt.highlight(targetPath)}`)
-    console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+    console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
   }
 }
 
@@ -246,14 +249,15 @@ async function cleanRouteModules() {
       'examples.ts',
       'article.ts',
       'safeguard.ts',
-      'help.ts'
+      'help.ts',
     ]
 
     for (const module of modulesToRemove) {
       const modulePath = path.join(modulesPath, module)
       try {
         await fs.rm(modulePath, { force: true })
-      } catch {
+      }
+      catch {
         // 文件不存在时忽略错误
       }
     }
@@ -370,9 +374,10 @@ export const routeModules: AppRouteRecord[] = [
     await fs.writeFile(path.join(modulesPath, 'index.ts'), indexContent, 'utf-8')
 
     console.log(`     ${icons.success} ${fmt.success('清理路由模块完成')}`)
-  } catch (err) {
+  }
+  catch (err) {
     console.log(`     ${icons.error} ${fmt.error('清理路由模块失败')}`)
-    console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+    console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
   }
 }
 
@@ -393,9 +398,10 @@ export enum RoutesAlias {
 
     await fs.writeFile(routesAliasPath, cleanedAlias, 'utf-8')
     console.log(`     ${icons.success} ${fmt.success('重写路由别名配置完成')}`)
-  } catch (err) {
+  }
+  catch (err) {
     console.log(`     ${icons.error} ${fmt.error('清理路由别名失败')}`)
-    console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+    console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
   }
 }
 
@@ -420,9 +426,10 @@ export const upgradeLogList = ref<UpgradeLog[]>([])
 
     await fs.writeFile(changeLogPath, cleanedChangeLog, 'utf-8')
     console.log(`     ${icons.success} ${fmt.success('清空变更日志数据完成')}`)
-  } catch (err) {
+  }
+  catch (err) {
     console.log(`     ${icons.error} ${fmt.error('清理变更日志失败')}`)
-    console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+    console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
   }
 }
 
@@ -430,7 +437,7 @@ export const upgradeLogList = ref<UpgradeLog[]>([])
 async function cleanLanguageFiles() {
   const languageFiles = [
     { path: 'src/locales/langs/zh.json', name: '中文语言文件' },
-    { path: 'src/locales/langs/en.json', name: '英文语言文件' }
+    { path: 'src/locales/langs/en.json', name: '英文语言文件' },
   ]
 
   for (const { path: langPath, name } of languageFiles) {
@@ -446,7 +453,7 @@ async function cleanLanguageFiles() {
         'examples',
         'safeguard',
         'plan',
-        'help'
+        'help',
       ]
 
       if (langData.menus) {
@@ -474,7 +481,7 @@ async function cleanLanguageFiles() {
             'menu3',
             'menu31',
             'menu32',
-            'menu321'
+            'menu321',
           ]
           systemKeysToRemove.forEach((key) => {
             if (langData.menus.system[key]) {
@@ -486,9 +493,10 @@ async function cleanLanguageFiles() {
 
       await fs.writeFile(fullPath, JSON.stringify(langData, null, 2), 'utf-8')
       console.log(`     ${icons.success} ${fmt.success(`清理${name}完成`)}`)
-    } catch (err) {
+    }
+    catch (err) {
       console.log(`     ${icons.error} ${fmt.error(`清理${name}失败`)}`)
-      console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+      console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
     }
   }
 }
@@ -581,9 +589,10 @@ export default Object.freeze(fastEnterConfig)
 
     await fs.writeFile(fastEnterPath, cleanedFastEnter, 'utf-8')
     console.log(`     ${icons.success} ${fmt.success('清理快速入口配置完成')}`)
-  } catch (err) {
+  }
+  catch (err) {
     console.log(`     ${icons.error} ${fmt.error('清理快速入口配置失败')}`)
-    console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+    console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
   }
 }
 
@@ -594,30 +603,31 @@ async function updateMenuApi() {
   try {
     const content = await fs.readFile(apiPath, 'utf-8')
     const updatedContent = content.replace(
-      "url: '/api/v3/system/menus'",
-      "url: '/api/v3/system/menus/simple'"
+      'url: \'/api/v3/system/menus\'',
+      'url: \'/api/v3/system/menus/simple\'',
     )
 
     await fs.writeFile(apiPath, updatedContent, 'utf-8')
     console.log(`     ${icons.success} ${fmt.success('更新菜单接口完成')}`)
-  } catch (err) {
+  }
+  catch (err) {
     console.log(`     ${icons.error} ${fmt.error('更新菜单接口失败')}`)
-    console.log(`     ${fmt.dim('错误详情: ' + err)}`)
+    console.log(`     ${fmt.dim(`错误详情: ${err}`)}`)
   }
 }
 
 // 用户确认函数
 async function getUserConfirmation(): Promise<boolean> {
-  const { createInterface } = await import('readline')
+  const { createInterface } = await import('node:readline')
 
   return new Promise((resolve) => {
     const rl = createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     })
 
     console.log(
-      `  ${fmt.highlight('请输入')} ${fmt.success('yes')} ${fmt.highlight('确认执行清理操作，或按 Enter 取消')}`
+      `  ${fmt.highlight('请输入')} ${fmt.success('yes')} ${fmt.highlight('确认执行清理操作，或按 Enter 取消')}`,
     )
     console.log()
     process.stdout.write(`  ${icons.arrow} `)
@@ -633,7 +643,7 @@ async function getUserConfirmation(): Promise<boolean> {
 async function showCleanupWarning() {
   createCard('安全警告', [
     `${fmt.warning('此操作将永久删除以下演示内容，且无法恢复！')}`,
-    `${fmt.dim('请仔细阅读清理列表，确认后再继续操作')}`
+    `${fmt.dim('请仔细阅读清理列表，确认后再继续操作')}`,
   ])
 
   const cleanupItems = [
@@ -641,37 +651,37 @@ async function showCleanupWarning() {
       icon: icons.image,
       name: '图片资源',
       desc: '演示用的封面图片、3D图片、运维图片等',
-      color: theme.orange
+      color: theme.orange,
     },
     {
       icon: icons.file,
       name: '演示页面',
       desc: 'widgets、template、article、examples、safeguard等页面',
-      color: theme.purple
+      color: theme.purple,
     },
     {
       icon: icons.code,
       name: '路由模块文件',
       desc: '删除演示路由模块，只保留核心模块（dashboard、system、result、exception）',
-      color: theme.primary
+      color: theme.primary,
     },
     {
       icon: icons.link,
       name: '路由别名',
       desc: '重写routesAlias.ts，移除演示路由别名',
-      color: theme.info
+      color: theme.info,
     },
     {
       icon: icons.data,
       name: 'Mock数据',
       desc: '演示用的JSON数据、文章列表、评论数据等',
-      color: theme.success
+      color: theme.success,
     },
     {
       icon: icons.globe,
       name: '多语言文件',
       desc: '清理中英文语言包中的演示菜单项',
-      color: theme.warning
+      color: theme.warning,
     },
     { icon: icons.map, name: '地图组件', desc: '移除art-map-chart地图组件', color: theme.error },
     { icon: icons.chat, name: '评论组件', desc: '移除comment-widget评论组件', color: theme.orange },
@@ -679,8 +689,8 @@ async function showCleanupWarning() {
       icon: icons.bolt,
       name: '快速入口',
       desc: '移除分析页、礼花效果、聊天、更新日志、定价、留言管理等无效项目',
-      color: theme.purple
-    }
+      color: theme.purple,
+    },
   ]
 
   console.log(`  ${fmt.badge('', theme.bgRed)} ${fmt.title('将要清理的内容')}`)
@@ -701,7 +711,7 @@ async function showCleanupWarning() {
     { name: 'Result', desc: '结果页面' },
     { name: 'Exception', desc: '异常页面' },
     { name: 'Auth', desc: '登录注册功能' },
-    { name: 'Core Components', desc: '核心组件库' }
+    { name: 'Core Components', desc: '核心组件库' },
   ]
 
   preservedModules.forEach((module) => {
@@ -724,10 +734,10 @@ async function showStats() {
     `${fmt.info('涉及路径')}: ${fmt.highlight(stats.deletedPaths.toString())} 个目录/文件`,
     ...(stats.failedPaths > 0
       ? [
-          `${icons.error} ${fmt.error('删除失败')}: ${fmt.highlight(stats.failedPaths.toString())} 个路径`
+          `${icons.error} ${fmt.error('删除失败')}: ${fmt.highlight(stats.failedPaths.toString())} 个路径`,
         ]
       : []),
-    `${fmt.info('耗时')}: ${fmt.highlight(seconds)} 秒`
+    `${fmt.info('耗时')}: ${fmt.highlight(seconds)} 秒`,
   ])
 }
 
@@ -735,22 +745,22 @@ async function showStats() {
 function createSuccessBanner() {
   console.log()
   console.log(
-    fmt.gradient('  ╔══════════════════════════════════════════════════════════════════╗')
+    fmt.gradient('  ╔══════════════════════════════════════════════════════════════════╗'),
   )
   console.log(
-    fmt.gradient('  ║                                                                  ║')
+    fmt.gradient('  ║                                                                  ║'),
   )
   console.log(
-    `  ║                  ${icons.star} ${fmt.success('清理完成！项目已准备就绪')} ${icons.rocket}                  ║`
+    `  ║                  ${icons.star} ${fmt.success('清理完成！项目已准备就绪')} ${icons.rocket}                  ║`,
   )
   console.log(
-    `  ║                    ${fmt.dim('现在可以开始您的开发之旅了！')}                  ║`
+    `  ║                    ${fmt.dim('现在可以开始您的开发之旅了！')}                  ║`,
   )
   console.log(
-    fmt.gradient('  ║                                                                  ║')
+    fmt.gradient('  ║                                                                  ║'),
   )
   console.log(
-    fmt.gradient('  ╚══════════════════════════════════════════════════════════════════╝')
+    fmt.gradient('  ╚══════════════════════════════════════════════════════════════════╝'),
   )
   console.log()
 }
@@ -832,7 +842,7 @@ async function main() {
 main().catch((err) => {
   console.log()
   console.log(`  ${icons.error} ${fmt.error('清理脚本执行出错')}`)
-  console.log(`  ${fmt.dim('错误详情: ' + err)}`)
+  console.log(`  ${fmt.dim(`错误详情: ${err}`)}`)
   console.log()
   process.exit(1)
 })

@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import AppConfig from '@/config'
+
+interface Comment {
+  id: number
+  author: string
+  content: string
+  timestamp: string
+  replies: Comment[]
+}
+
+const props = defineProps<{
+  comment: Comment
+  showReplyForm: number | null
+}>()
+
+const emit = defineEmits<{
+  (event: 'toggle-reply', commentId: number): void
+  (event: 'add-reply', commentId: number, replyAuthor: string, replyContent: string): void
+}>()
+
+const replyAuthor = ref('')
+const replyContent = ref('')
+
+function toggleReply(commentId: number) {
+  emit('toggle-reply', commentId)
+}
+
+function addReply(commentId: number, author: string, content: string) {
+  emit('add-reply', commentId, author, content)
+  replyAuthor.value = ''
+  replyContent.value = ''
+}
+function handleSubmit() {
+  if (!replyAuthor.value.trim() || !replyContent.value.trim()) {
+    return
+  }
+  emit('add-reply', props.comment.id, replyAuthor.value, replyContent.value)
+  replyAuthor.value = ''
+  replyContent.value = ''
+}
+
+function formatDate(timestamp: string) {
+  const date = new Date(timestamp)
+  return date.toLocaleString()
+}
+
+let lastColor: string | null = null
+
+function randomColor() {
+  let newColor: string
+
+  do {
+    const index = Math.floor(Math.random() * AppConfig.systemMainColor.length)
+    newColor = AppConfig.systemMainColor[index]
+  } while (newColor === lastColor)
+
+  lastColor = newColor
+  return newColor
+}
+</script>
+
 <template>
   <li>
     <div>
@@ -22,19 +85,19 @@
       </div>
     </div>
 
-    <ul class="pl-2.5" v-if="comment.replies.length > 0">
+    <ul v-if="comment.replies.length > 0" class="pl-2.5">
       <CommentItem
         v-for="reply in comment.replies"
         :key="reply.id"
         :comment="reply"
         :show-reply-form="showReplyForm"
+        class="mt-5"
         @toggle-reply="toggleReply"
         @add-reply="addReply"
-        class="mt-5"
       />
     </ul>
 
-    <ElForm v-if="showReplyForm === comment.id" @submit.prevent="handleSubmit" class="mt-4">
+    <ElForm v-if="showReplyForm === comment.id" class="mt-4" @submit.prevent="handleSubmit">
       <ElFormItem prop="author">
         <ElInput v-model="replyAuthor" placeholder="你的名称" clearable />
       </ElFormItem>
@@ -49,73 +112,14 @@
       </ElFormItem>
       <ElFormItem>
         <div class="flex justify-end gap-2 w-full">
-          <ElButton @click="toggleReply(comment.id)">取消</ElButton>
-          <ElButton type="primary" @click="handleSubmit">发布</ElButton>
+          <ElButton @click="toggleReply(comment.id)">
+            取消
+          </ElButton>
+          <ElButton type="primary" @click="handleSubmit">
+            发布
+          </ElButton>
         </div>
       </ElFormItem>
     </ElForm>
   </li>
 </template>
-
-<script setup lang="ts">
-  import AppConfig from '@/config'
-  import { ref } from 'vue'
-
-  interface Comment {
-    id: number
-    author: string
-    content: string
-    timestamp: string
-    replies: Comment[]
-  }
-
-  const props = defineProps<{
-    comment: Comment
-    showReplyForm: number | null
-  }>()
-
-  const emit = defineEmits<{
-    (event: 'toggle-reply', commentId: number): void
-    (event: 'add-reply', commentId: number, replyAuthor: string, replyContent: string): void
-  }>()
-
-  const replyAuthor = ref('')
-  const replyContent = ref('')
-
-  const toggleReply = (commentId: number) => {
-    emit('toggle-reply', commentId)
-  }
-
-  const addReply = (commentId: number, author: string, content: string) => {
-    emit('add-reply', commentId, author, content)
-    replyAuthor.value = ''
-    replyContent.value = ''
-  }
-  const handleSubmit = () => {
-    if (!replyAuthor.value.trim() || !replyContent.value.trim()) {
-      return
-    }
-    emit('add-reply', props.comment.id, replyAuthor.value, replyContent.value)
-    replyAuthor.value = ''
-    replyContent.value = ''
-  }
-
-  const formatDate = (timestamp: string) => {
-    const date = new Date(timestamp)
-    return date.toLocaleString()
-  }
-
-  let lastColor: string | null = null
-
-  const randomColor = () => {
-    let newColor: string
-
-    do {
-      const index = Math.floor(Math.random() * AppConfig.systemMainColor.length)
-      newColor = AppConfig.systemMainColor[index]
-    } while (newColor === lastColor)
-
-    lastColor = newColor
-    return newColor
-  }
-</script>

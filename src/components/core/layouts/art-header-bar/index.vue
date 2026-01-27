@@ -1,9 +1,187 @@
 <!-- 顶部栏 -->
+<script setup lang="ts">
+import type { LanguageEnum } from '@/enums/appEnum'
+import { useFullscreen, useWindowSize } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import AppConfig from '@/config'
+import { MenuTypeEnum } from '@/enums/appEnum'
+import { useCommon } from '@/hooks/core/useCommon'
+import { useHeaderBar } from '@/hooks/core/useHeaderBar'
+import { languageOptions } from '@/locales'
+import { useMenuStore } from '@/store/modules/menu'
+import { useSettingStore } from '@/store/modules/setting'
+import { useUserStore } from '@/store/modules/user'
+import { mittBus } from '@/utils/sys'
+import { themeAnimation } from '@/utils/ui/animation'
+import ArtUserMenu from './widget/ArtUserMenu.vue'
+
+defineOptions({ name: 'ArtHeaderBar' })
+
+// 检测操作系统类型
+const isWindows = navigator.userAgent.includes('Windows')
+
+const router = useRouter()
+const { locale } = useI18n()
+const { width } = useWindowSize()
+
+const settingStore = useSettingStore()
+const userStore = useUserStore()
+const menuStore = useMenuStore()
+
+// 顶部栏功能配置
+const {
+  shouldShowMenuButton,
+  shouldShowRefreshButton,
+  shouldShowFastEnter,
+  shouldShowBreadcrumb,
+  shouldShowGlobalSearch,
+  shouldShowFullscreen,
+  shouldShowNotification,
+  shouldShowChat,
+  shouldShowLanguage,
+  shouldShowSettings,
+  shouldShowThemeToggle,
+  fastEnterMinWidth: headerBarFastEnterMinWidth,
+} = useHeaderBar()
+
+const { menuOpen, systemThemeColor, showSettingGuide, menuType, isDark, tabStyle }
+  = storeToRefs(settingStore)
+
+const { language } = storeToRefs(userStore)
+const { menuList } = storeToRefs(menuStore)
+
+const showNotice = ref(false)
+const notice = ref(null)
+
+// 菜单类型判断
+const isLeftMenu = computed(() => menuType.value === MenuTypeEnum.LEFT)
+const isDualMenu = computed(() => menuType.value === MenuTypeEnum.DUAL_MENU)
+const isTopMenu = computed(() => menuType.value === MenuTypeEnum.TOP)
+const isTopLeftMenu = computed(() => menuType.value === MenuTypeEnum.TOP_LEFT)
+
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+
+onMounted(() => {
+  initLanguage()
+  document.addEventListener('click', bodyCloseNotice)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', bodyCloseNotice)
+})
+
+/**
+ * 切换全屏状态
+ */
+function toggleFullScreen(): void {
+  toggleFullscreen()
+}
+
+/**
+ * 切换菜单显示/隐藏状态
+ */
+function visibleMenu(): void {
+  settingStore.setMenuOpen(!menuOpen.value)
+}
+
+const { homePath } = useCommon()
+const { refresh } = useCommon()
+
+/**
+ * 跳转到首页
+ */
+function toHome(): void {
+  router.push(homePath.value)
+}
+
+/**
+ * 刷新页面
+ * @param {number} time - 延迟时间，默认为0毫秒
+ */
+function reload(time: number = 0): void {
+  setTimeout(() => {
+    refresh()
+  }, time)
+}
+
+/**
+ * 初始化语言设置
+ */
+function initLanguage(): void {
+  locale.value = language.value
+}
+
+/**
+ * 切换系统语言
+ * @param {LanguageEnum} lang - 目标语言类型
+ */
+function changeLanguage(lang: LanguageEnum): void {
+  if (locale.value === lang)
+    return
+  locale.value = lang
+  userStore.setLanguage(lang)
+  reload(50)
+}
+
+/**
+ * 打开设置面板
+ */
+function openSetting(): void {
+  mittBus.emit('openSetting')
+
+  // 隐藏设置引导提示
+  if (showSettingGuide.value) {
+    settingStore.hideSettingGuide()
+  }
+}
+
+/**
+ * 打开全局搜索对话框
+ */
+function openSearchDialog(): void {
+  mittBus.emit('openSearchDialog')
+}
+
+/**
+ * 点击页面其他区域关闭通知面板
+ * @param {Event} e - 点击事件对象
+ */
+function bodyCloseNotice(e: any): void {
+  if (!showNotice.value)
+    return
+
+  const target = e.target as HTMLElement
+
+  // 检查是否点击了通知按钮或通知面板内部
+  const isNoticeButton = target.closest('.notice-button')
+  const isNoticePanel = target.closest('.art-notification-panel')
+
+  if (!isNoticeButton && !isNoticePanel) {
+    showNotice.value = false
+  }
+}
+
+/**
+ * 切换通知面板显示状态
+ */
+function visibleNotice(): void {
+  showNotice.value = !showNotice.value
+}
+
+/**
+ * 打开聊天窗口
+ */
+function openChat(): void {
+  mittBus.emit('openChat')
+}
+</script>
+
 <template>
   <div
     class="w-full bg-[var(--default-bg-color)]"
     :class="[
-      tabStyle === 'tab-card' || tabStyle === 'tab-google' ? 'mb-5 max-sm:mb-3 !bg-box' : ''
+      tabStyle === 'tab-card' || tabStyle === 'tab-google' ? 'mb-5 max-sm:mb-3 !bg-box' : '',
     ]"
   >
     <div
@@ -11,14 +189,16 @@
       :class="[
         tabStyle === 'tab-card' || tabStyle === 'tab-google'
           ? 'border-b border-[var(--art-card-border)]'
-          : ''
+          : '',
       ]"
     >
       <div class="flex-c flex-1 min-w-0 leading-15" style="display: flex">
         <!-- 系统信息  -->
-        <div class="flex-c c-p" @click="toHome" v-if="isTopMenu">
+        <div v-if="isTopMenu" class="flex-c c-p" @click="toHome">
           <ArtLogo class="pl-4.5" />
-          <p v-if="width >= 1400" class="my-0 mx-2 ml-2 text-lg">{{ AppConfig.systemInfo.name }}</p>
+          <p v-if="width >= 1400" class="my-0 mx-2 ml-2 text-lg">
+            {{ AppConfig.systemInfo.name }}
+          </p>
         </div>
 
         <ArtLogo
@@ -82,16 +262,16 @@
         <ArtIconButton
           v-if="shouldShowFullscreen"
           :icon="isFullscreen ? 'ri:fullscreen-exit-line' : 'ri:fullscreen-fill'"
-          :class="[!isFullscreen ? 'full-screen-btn' : 'exit-full-screen-btn', 'ml-3']"
-          class="max-md:!hidden"
+          :class="[!isFullscreen ? 'full-screen-btn' : 'exit-full-screen-btn']"
+          class="max-md:!hidden ml-3"
           @click="toggleFullScreen"
         />
 
         <!-- 国际化按钮 -->
         <ElDropdown
-          @command="changeLanguage"
-          popper-class="langDropDownStyle"
           v-if="shouldShowLanguage"
+          popper-class="langDropDownStyle"
+          @command="changeLanguage"
         >
           <ArtIconButton icon="ri:translate-2" class="language-btn text-[19px]" />
           <template #dropdown>
@@ -102,7 +282,7 @@
                   :class="{ 'is-selected': locale === item.value }"
                 >
                   <span class="menu-txt">{{ item.label }}</span>
-                  <ArtSvgIcon icon="ri:check-fill" v-if="locale === item.value" />
+                  <ArtSvgIcon v-if="locale === item.value" icon="ri:check-fill" />
                 </ElDropdownItem>
               </div>
             </ElDropdownMenu>
@@ -116,7 +296,7 @@
           class="notice-button relative"
           @click="visibleNotice"
         >
-          <div class="absolute top-2 right-2 size-1.5 !bg-danger rounded-full"></div>
+          <div class="absolute top-2 right-2 size-1.5 !bg-danger rounded-full" />
         </ArtIconButton>
 
         <!-- 聊天按钮 -->
@@ -126,7 +306,7 @@
           class="chat-button relative"
           @click="openChat"
         >
-          <div class="breathing-dot absolute top-2 right-2 size-1.5 !bg-success rounded-full"></div>
+          <div class="breathing-dot absolute top-2 right-2 size-1.5 !bg-success rounded-full" />
         </ArtIconButton>
 
         <!-- 设置按钮 -->
@@ -138,11 +318,9 @@
               </div>
             </template>
             <template #default>
-              <p
-                >{{ $t('topBar.guide.title')
-                }}<span :style="{ color: systemThemeColor }"> {{ $t('topBar.guide.theme') }} </span
-                >、 <span :style="{ color: systemThemeColor }"> {{ $t('topBar.guide.menu') }} </span
-                >{{ $t('topBar.guide.description') }}
+              <p>
+                {{ $t('topBar.guide.title')
+                }}<span :style="{ color: systemThemeColor }"> {{ $t('topBar.guide.theme') }} </span>、 <span :style="{ color: systemThemeColor }"> {{ $t('topBar.guide.menu') }} </span>{{ $t('topBar.guide.description') }}
               </p>
             </template>
           </ElPopover>
@@ -151,8 +329,8 @@
         <!-- 主题切换按钮 -->
         <ArtIconButton
           v-if="shouldShowThemeToggle"
-          @click="themeAnimation"
           :icon="isDark ? 'ri:sun-fill' : 'ri:moon-line'"
+          @click="themeAnimation"
         />
 
         <!-- 用户头像、菜单 -->
@@ -164,184 +342,9 @@
     <ArtWorkTab />
 
     <!-- 通知 -->
-    <ArtNotification v-model:value="showNotice" ref="notice" />
+    <ArtNotification ref="notice" v-model:value="showNotice" />
   </div>
 </template>
-
-<script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import { useRouter } from 'vue-router'
-  import { useFullscreen, useWindowSize } from '@vueuse/core'
-  import { LanguageEnum, MenuTypeEnum } from '@/enums/appEnum'
-  import { useSettingStore } from '@/store/modules/setting'
-  import { useUserStore } from '@/store/modules/user'
-  import { useMenuStore } from '@/store/modules/menu'
-  import AppConfig from '@/config'
-  import { languageOptions } from '@/locales'
-  import { mittBus } from '@/utils/sys'
-  import { themeAnimation } from '@/utils/ui/animation'
-  import { useCommon } from '@/hooks/core/useCommon'
-  import { useHeaderBar } from '@/hooks/core/useHeaderBar'
-  import ArtUserMenu from './widget/ArtUserMenu.vue'
-
-  defineOptions({ name: 'ArtHeaderBar' })
-
-  // 检测操作系统类型
-  const isWindows = navigator.userAgent.includes('Windows')
-
-  const router = useRouter()
-  const { locale } = useI18n()
-  const { width } = useWindowSize()
-
-  const settingStore = useSettingStore()
-  const userStore = useUserStore()
-  const menuStore = useMenuStore()
-
-  // 顶部栏功能配置
-  const {
-    shouldShowMenuButton,
-    shouldShowRefreshButton,
-    shouldShowFastEnter,
-    shouldShowBreadcrumb,
-    shouldShowGlobalSearch,
-    shouldShowFullscreen,
-    shouldShowNotification,
-    shouldShowChat,
-    shouldShowLanguage,
-    shouldShowSettings,
-    shouldShowThemeToggle,
-    fastEnterMinWidth: headerBarFastEnterMinWidth
-  } = useHeaderBar()
-
-  const { menuOpen, systemThemeColor, showSettingGuide, menuType, isDark, tabStyle } =
-    storeToRefs(settingStore)
-
-  const { language } = storeToRefs(userStore)
-  const { menuList } = storeToRefs(menuStore)
-
-  const showNotice = ref(false)
-  const notice = ref(null)
-
-  // 菜单类型判断
-  const isLeftMenu = computed(() => menuType.value === MenuTypeEnum.LEFT)
-  const isDualMenu = computed(() => menuType.value === MenuTypeEnum.DUAL_MENU)
-  const isTopMenu = computed(() => menuType.value === MenuTypeEnum.TOP)
-  const isTopLeftMenu = computed(() => menuType.value === MenuTypeEnum.TOP_LEFT)
-
-  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
-
-  onMounted(() => {
-    initLanguage()
-    document.addEventListener('click', bodyCloseNotice)
-  })
-
-  onUnmounted(() => {
-    document.removeEventListener('click', bodyCloseNotice)
-  })
-
-  /**
-   * 切换全屏状态
-   */
-  const toggleFullScreen = (): void => {
-    toggleFullscreen()
-  }
-
-  /**
-   * 切换菜单显示/隐藏状态
-   */
-  const visibleMenu = (): void => {
-    settingStore.setMenuOpen(!menuOpen.value)
-  }
-
-  const { homePath } = useCommon()
-  const { refresh } = useCommon()
-
-  /**
-   * 跳转到首页
-   */
-  const toHome = (): void => {
-    router.push(homePath.value)
-  }
-
-  /**
-   * 刷新页面
-   * @param {number} time - 延迟时间，默认为0毫秒
-   */
-  const reload = (time: number = 0): void => {
-    setTimeout(() => {
-      refresh()
-    }, time)
-  }
-
-  /**
-   * 初始化语言设置
-   */
-  const initLanguage = (): void => {
-    locale.value = language.value
-  }
-
-  /**
-   * 切换系统语言
-   * @param {LanguageEnum} lang - 目标语言类型
-   */
-  const changeLanguage = (lang: LanguageEnum): void => {
-    if (locale.value === lang) return
-    locale.value = lang
-    userStore.setLanguage(lang)
-    reload(50)
-  }
-
-  /**
-   * 打开设置面板
-   */
-  const openSetting = (): void => {
-    mittBus.emit('openSetting')
-
-    // 隐藏设置引导提示
-    if (showSettingGuide.value) {
-      settingStore.hideSettingGuide()
-    }
-  }
-
-  /**
-   * 打开全局搜索对话框
-   */
-  const openSearchDialog = (): void => {
-    mittBus.emit('openSearchDialog')
-  }
-
-  /**
-   * 点击页面其他区域关闭通知面板
-   * @param {Event} e - 点击事件对象
-   */
-  const bodyCloseNotice = (e: any): void => {
-    if (!showNotice.value) return
-
-    const target = e.target as HTMLElement
-
-    // 检查是否点击了通知按钮或通知面板内部
-    const isNoticeButton = target.closest('.notice-button')
-    const isNoticePanel = target.closest('.art-notification-panel')
-
-    if (!isNoticeButton && !isNoticePanel) {
-      showNotice.value = false
-    }
-  }
-
-  /**
-   * 切换通知面板显示状态
-   */
-  const visibleNotice = (): void => {
-    showNotice.value = !showNotice.value
-  }
-
-  /**
-   * 打开聊天窗口
-   */
-  const openChat = (): void => {
-    mittBus.emit('openChat')
-  }
-</script>
 
 <style lang="scss" scoped>
   /* Custom animations */

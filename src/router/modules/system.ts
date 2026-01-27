@@ -1,4 +1,4 @@
-import { AppRouteRecord } from '@/types/router'
+import type { AppRouteRecord } from '@/types/router'
 
 export const systemRoutes: AppRouteRecord = {
   path: '/system',
@@ -7,7 +7,7 @@ export const systemRoutes: AppRouteRecord = {
   meta: {
     title: 'menus.system.title',
     icon: 'ri:user-3-line',
-    roles: ['R_SUPER', 'R_ADMIN']
+    roles: ['R_SUPER', 'R_ADMIN'],
   },
   children: [
     {
@@ -18,8 +18,8 @@ export const systemRoutes: AppRouteRecord = {
         title: 'menus.system.user',
         icon: 'ri:user-line',
         keepAlive: true,
-        roles: ['R_SUPER', 'R_ADMIN']
-      }
+        roles: ['R_SUPER', 'R_ADMIN'],
+      },
     },
     {
       path: 'role',
@@ -29,8 +29,8 @@ export const systemRoutes: AppRouteRecord = {
         title: 'menus.system.role',
         icon: 'ri:user-settings-line',
         keepAlive: true,
-        roles: ['R_SUPER']
-      }
+        roles: ['R_SUPER'],
+      },
     },
     {
       path: 'user-center',
@@ -41,8 +41,8 @@ export const systemRoutes: AppRouteRecord = {
         icon: 'ri:user-line',
         isHide: true,
         keepAlive: true,
-        isHideTab: true
-      }
+        isHideTab: true,
+      },
     },
     {
       path: 'menu',
@@ -56,9 +56,9 @@ export const systemRoutes: AppRouteRecord = {
         authList: [
           { title: '新增', authMark: 'add' },
           { title: '编辑', authMark: 'edit' },
-          { title: '删除', authMark: 'delete' }
-        ]
-      }
+          { title: '删除', authMark: 'delete' },
+        ],
+      },
     },
     {
       path: 'nested',
@@ -67,7 +67,7 @@ export const systemRoutes: AppRouteRecord = {
       meta: {
         title: 'menus.system.nested',
         icon: 'ri:menu-unfold-3-line',
-        keepAlive: true
+        keepAlive: true,
       },
       children: [
         {
@@ -77,8 +77,8 @@ export const systemRoutes: AppRouteRecord = {
           meta: {
             title: 'menus.system.menu1',
             icon: 'ri:align-justify',
-            keepAlive: true
-          }
+            keepAlive: true,
+          },
         },
         {
           path: 'menu2',
@@ -87,7 +87,7 @@ export const systemRoutes: AppRouteRecord = {
           meta: {
             title: 'menus.system.menu2',
             icon: 'ri:align-justify',
-            keepAlive: true
+            keepAlive: true,
           },
           children: [
             {
@@ -97,10 +97,10 @@ export const systemRoutes: AppRouteRecord = {
               meta: {
                 title: 'menus.system.menu21',
                 icon: 'ri:align-justify',
-                keepAlive: true
-              }
-            }
-          ]
+                keepAlive: true,
+              },
+            },
+          ],
         },
         {
           path: 'menu3',
@@ -109,7 +109,7 @@ export const systemRoutes: AppRouteRecord = {
           meta: {
             title: 'menus.system.menu3',
             icon: 'ri:align-justify',
-            keepAlive: true
+            keepAlive: true,
           },
           children: [
             {
@@ -118,8 +118,8 @@ export const systemRoutes: AppRouteRecord = {
               component: '/system/nested/menu3',
               meta: {
                 title: 'menus.system.menu31',
-                keepAlive: true
-              }
+                keepAlive: true,
+              },
             },
             {
               path: 'menu3-2',
@@ -127,7 +127,7 @@ export const systemRoutes: AppRouteRecord = {
               component: '',
               meta: {
                 title: 'menus.system.menu32',
-                keepAlive: true
+                keepAlive: true,
               },
               children: [
                 {
@@ -136,14 +136,14 @@ export const systemRoutes: AppRouteRecord = {
                   component: '/system/nested/menu3/menu3-2',
                   meta: {
                     title: 'menus.system.menu321',
-                    keepAlive: true
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                    keepAlive: true,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
 }

@@ -22,7 +22,7 @@
  * @author Art Design Pro Team
  */
 
-import { AppRouteRecord } from '@/types'
+import type { AppRouteRecord } from '@/types'
 
 // 检查是否为 iframe 路由
 export function isIframe(url: string): boolean {
@@ -34,7 +34,7 @@ export function isIframe(url: string): boolean {
  * @param menuItem 菜单项
  * @returns 是否为有效菜单项
  */
-const isValidMenuItem = (menuItem: AppRouteRecord): boolean => {
+function isValidMenuItem(menuItem: AppRouteRecord): boolean {
   return !!(menuItem.path && menuItem.path.trim() && !menuItem.meta?.isHide)
 }
 
@@ -43,7 +43,7 @@ const isValidMenuItem = (menuItem: AppRouteRecord): boolean => {
  * @param path 路径
  * @returns 标准化后的路径
  */
-const normalizePath = (path: string): string => {
+function normalizePath(path: string): string {
   return path.startsWith('/') ? path : `/${path}`
 }
 
@@ -52,7 +52,7 @@ const normalizePath = (path: string): string => {
  * @param menuList 菜单列表
  * @returns 第一个有效路径，如果没有找到则返回空字符串
  */
-export const getFirstMenuPath = (menuList: AppRouteRecord[]): string => {
+export function getFirstMenuPath(menuList: AppRouteRecord[]): string {
   if (!Array.isArray(menuList) || menuList.length === 0) {
     return ''
   }

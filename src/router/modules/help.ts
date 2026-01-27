@@ -1,4 +1,4 @@
-import { AppRouteRecord } from '@/types/router'
+import type { AppRouteRecord } from '@/types/router'
 import { WEB_LINKS } from '@/utils/constants'
 
 export const helpRoutes: AppRouteRecord[] = [
@@ -11,8 +11,8 @@ export const helpRoutes: AppRouteRecord[] = [
       icon: 'ri:bill-line',
       link: WEB_LINKS.DOCS,
       isIframe: false,
-      keepAlive: false
-    }
+      keepAlive: false,
+    },
   },
   {
     name: 'LiteVersion',
@@ -23,8 +23,8 @@ export const helpRoutes: AppRouteRecord[] = [
       icon: 'ri:bus-2-line',
       link: WEB_LINKS.LiteVersion,
       isIframe: false,
-      keepAlive: false
-    }
+      keepAlive: false,
+    },
   },
   {
     name: 'OldVersion',
@@ -35,8 +35,8 @@ export const helpRoutes: AppRouteRecord[] = [
       icon: 'ri:subway-line',
       link: WEB_LINKS.OldVersion,
       isIframe: false,
-      keepAlive: false
-    }
+      keepAlive: false,
+    },
   },
   {
     name: 'ChangeLog',
@@ -46,7 +46,7 @@ export const helpRoutes: AppRouteRecord[] = [
       title: 'menus.plan.log',
       showTextBadge: `v${__APP_VERSION__}`,
       icon: 'ri:gamepad-line',
-      keepAlive: false
-    }
-  }
+      keepAlive: false,
+    },
+  },
 ]

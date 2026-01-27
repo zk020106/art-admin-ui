@@ -1,3 +1,48 @@
+<script lang="ts" setup>
+import type { PropType } from 'vue'
+import type { AppRouteRecord } from '@/types/router'
+import { computed } from 'vue'
+import { handleMenuJump } from '@/utils/navigation'
+import { formatMenuTitle } from '@/utils/router'
+
+const props = defineProps({
+  item: {
+    type: Object as PropType<AppRouteRecord>,
+    required: true,
+  },
+  theme: {
+    type: Object,
+    default: () => ({}),
+  },
+  isMobile: Boolean,
+  level: {
+    type: Number,
+    default: 0,
+  },
+})
+
+const emit = defineEmits(['close'])
+
+// 过滤后的子菜单项（不包含隐藏的）
+const filteredChildren = computed(() => {
+  return props.item.children?.filter(child => !child.meta.isHide) || []
+})
+
+// 计算当前项是否有可见的子菜单
+const hasChildren = computed(() => {
+  return filteredChildren.value.length > 0
+})
+
+function goPage(item: AppRouteRecord) {
+  closeMenu()
+  handleMenuJump(item)
+}
+
+function closeMenu() {
+  emit('close')
+}
+</script>
+
 <template>
   <ElSubMenu v-if="hasChildren" :index="item.path || item.meta.title" class="!p-0">
     <template #title>
@@ -43,50 +88,6 @@
     </div>
   </ElMenuItem>
 </template>
-
-<script lang="ts" setup>
-  import { computed, type PropType } from 'vue'
-  import { AppRouteRecord } from '@/types/router'
-  import { handleMenuJump } from '@/utils/navigation'
-  import { formatMenuTitle } from '@/utils/router'
-
-  const props = defineProps({
-    item: {
-      type: Object as PropType<AppRouteRecord>,
-      required: true
-    },
-    theme: {
-      type: Object,
-      default: () => ({})
-    },
-    isMobile: Boolean,
-    level: {
-      type: Number,
-      default: 0
-    }
-  })
-
-  const emit = defineEmits(['close'])
-
-  // 过滤后的子菜单项（不包含隐藏的）
-  const filteredChildren = computed(() => {
-    return props.item.children?.filter((child) => !child.meta.isHide) || []
-  })
-
-  // 计算当前项是否有可见的子菜单
-  const hasChildren = computed(() => {
-    return filteredChildren.value.length > 0
-  })
-
-  const goPage = (item: AppRouteRecord) => {
-    closeMenu()
-    handleMenuJump(item)
-  }
-
-  const closeMenu = () => {
-    emit('close')
-  }
-</script>
 
 <style scoped>
   :deep(.el-sub-menu__title .el-sub-menu__icon-arrow) {

@@ -1,7 +1,19 @@
 <!-- 工作台页面 -->
+<script setup lang="ts">
+import AboutProject from './modules/about-project.vue'
+import ActiveUser from './modules/active-user.vue'
+import CardList from './modules/card-list.vue'
+import Dynamic from './modules/dynamic-stats.vue'
+import NewUser from './modules/new-user.vue'
+import SalesOverview from './modules/sales-overview.vue'
+import TodoList from './modules/todo-list.vue'
+
+defineOptions({ name: 'Console' })
+</script>
+
 <template>
   <div>
-    <CardList></CardList>
+    <CardList />
 
     <ElRow :gutter="20">
       <ElCol :sm="24" :md="12" :lg="10">
@@ -27,15 +39,3 @@
     <AboutProject />
   </div>
 </template>
-
-<script setup lang="ts">
-  import CardList from './modules/card-list.vue'
-  import ActiveUser from './modules/active-user.vue'
-  import SalesOverview from './modules/sales-overview.vue'
-  import NewUser from './modules/new-user.vue'
-  import Dynamic from './modules/dynamic-stats.vue'
-  import TodoList from './modules/todo-list.vue'
-  import AboutProject from './modules/about-project.vue'
-
-  defineOptions({ name: 'Console' })
-</script>
