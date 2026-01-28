@@ -7,7 +7,7 @@ import createVitePlugins from './plugins'
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd()) as ImportMetaEnv
 
-  const { VITE_APP_VERSION, VITE_BASE_URL, VITE_API_PROXY_URL, VITE_APP_PORT } = env
+  const { VITE_APP_VERSION, VITE_BASE_URL, VITE_API_PROXY_URL, VITE_APP_PORT, VITE_API_URL } = env
 
   return defineConfig({
     resolve: {
@@ -29,9 +29,11 @@ export default defineConfig(({ command, mode }) => {
     server: {
       port: +VITE_APP_PORT,
       proxy: {
-        '/api': {
+        [VITE_API_URL]: {
           target: VITE_API_PROXY_URL,
           changeOrigin: true,
+          secure: false,
+          rewrite: path => path.replace(new RegExp(`^${VITE_API_URL}`), ''),
         },
       },
       host: true,
