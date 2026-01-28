@@ -1,0 +1,26 @@
+import type { Plugin } from 'vite'
+import boxen from 'boxen'
+import picocolors from 'picocolors'
+
+export default function appInfo(): Plugin {
+  const ADMIN_VERSION = '5.0.0-SNAPSHOT'
+
+  return {
+    name: 'appInfo',
+    apply: 'serve',
+    async buildStart() {
+      const { bold, green, cyan, bgGreen, underline } = picocolors
+      console.log(
+        boxen(
+          `${bold(green(`${bgGreen(`ContiNew Admin v${ADMIN_VERSION}`)}`))}\n${cyan('在线文档：')}${underline('https://continew.top')}\n${cyan('吐槽广场：')}${underline('https://continew.top/docs/admin/issue-hub.html')}\n${cyan('常见问题：')}${underline('https://continew.top/docs/admin/faq.html')}\n${cyan('更新日志：')}${underline('https://continew.top/docs/admin/changelog/')}\n${cyan('持续迭代优化的，高质量多租户中后台管理系统框架')}`,
+          {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'double',
+            textAlignment: 'center',
+          },
+        ),
+      )
+    },
+  }
+}
