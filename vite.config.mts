@@ -7,7 +7,7 @@ import createVitePlugins from './plugins'
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd()) as ImportMetaEnv
 
-  const { VITE_VERSION, VITE_BASE_URL, VITE_API_PROXY_URL, VITE_APP_PORT } = env
+  const { VITE_APP_VERSION, VITE_BASE_URL, VITE_API_PROXY_URL, VITE_APP_PORT } = env
 
   return defineConfig({
     resolve: {
@@ -23,7 +23,7 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: createVitePlugins(env, command === 'build'),
     define: {
-      __APP_VERSION__: JSON.stringify(VITE_VERSION),
+      __APP_VERSION__: JSON.stringify(VITE_APP_VERSION),
     },
     base: VITE_BASE_URL,
     server: {
