@@ -7,7 +7,7 @@ import ElementPlus from 'unplugin-element-plus/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, loadEnv } from 'vite'
-import viteCompression from 'vite-plugin-compression'
+import { compression } from 'vite-plugin-compression2'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default ({ mode }: { mode: string }) => {
@@ -42,14 +42,10 @@ export default ({ mode }: { mode: string }) => {
       ElementPlus({
         useSource: true,
       }),
-      // 压缩
-      viteCompression({
-        verbose: false, // 是否在控制台输出压缩结果
-        disable: false, // 是否禁用
-        algorithm: 'gzip', // 压缩算法
-        ext: '.gz', // 压缩后的文件名后缀
-        threshold: 10240, // 只有大小大于该值的资源会被处理 10240B = 10KB
-        deleteOriginFile: false, // 压缩后是否删除原文件
+      compression({
+        algorithms: ['gzip'],
+        threshold: 10240,
+        deleteOriginalAssets: false,
       }),
       vueDevTools(),
     ],
