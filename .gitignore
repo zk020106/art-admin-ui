@@ -5,6 +5,5 @@ dist
 .husky
 
 # Auto-generated files
-src/types/import/auto-imports.d.ts
-src/types/import/components.d.ts
-.auto-import.json
+src/types/auto-imports.d.ts
+src/types/components.d.ts
